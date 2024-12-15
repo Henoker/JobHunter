@@ -1,11 +1,13 @@
-// import { Logo } from "../components";
+import Logo from "../components/Logo";
 import main from "../assets/images/main.svg";
 import Wrapper from "../assets/wrappers/LandingPage";
 
 const Landing = () => {
   return (
     <Wrapper>
-      <nav>{/* <Logo /> */}</nav>
+      <nav>
+        <Logo />
+      </nav>
       <div className="container page">
         {/* info */}
         <div className="info">
