@@ -28,6 +28,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     #local apps
     "job.apps.JobConfig",
+    "accounts.apps.AccountsConfig",
     # third party
     'rest_framework',
     'corsheaders',
@@ -44,6 +45,8 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
 ]
+
+AUTH_USER_MODEL = "accounts.CustomUser"
 
 CORS_ALLOWED_ORIGINS = (
     "http://localhost:3000",
