@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     # third party
     'rest_framework',
     'corsheaders',
+    'rest_framework_simplejwt',
 ]
 
 MIDDLEWARE = [
@@ -45,6 +46,12 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
 
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.IsAuthenticated", # new
+    ],
+}
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
