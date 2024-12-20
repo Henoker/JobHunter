@@ -1,6 +1,7 @@
 
 from pathlib import Path
 from decouple import config
+from datetime import timedelta
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -49,9 +50,14 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticated", # new
+        "rest_framework.permissions.IsAuthenticated",  # new
     ],
+
+    "DEFAULT_AUTHENTICATION_CLASSES": (
+        "rest_framework_simplejwt.authentication.JWTAuthentication",
+    )
 }
+
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
@@ -62,11 +68,7 @@ CORS_ALLOWED_ORIGINS = (
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 
-REST_FRAMEWORK = {
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.AllowAny",
-    ],
-}
+
 
 ROOT_URLCONF = "django_api.urls"
 
@@ -144,3 +146,11 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
+    "ROTATE_REFRESH_TOKENS": False,
+    "BLACKLIST_AFTER_ROTATION": False,
+    "UPDATE_LAST_LOGIN": False,
+}    
