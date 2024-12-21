@@ -49,12 +49,9 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
-    'DEFAULT_PERMISSION_CLASSES': (
-        'rest_framework.permissions.IsAuthenticated',  # Global default
-    ),
+ 'DEFAULT_AUTHENTICATION_CLASSES': (
+    'rest_framework_simplejwt.authentication.JWTAuthentication',
+ )
 }
 
 
@@ -148,9 +145,18 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 SIMPLE_JWT = {
-    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
-    "REFRESH_TOKEN_LIFETIME": timedelta(days=1),
-    "ROTATE_REFRESH_TOKENS": False,
-    "BLACKLIST_AFTER_ROTATION": False,
-    "UPDATE_LAST_LOGIN": False,
-}    
+    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Access token expiration time
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Refresh token expiration time
+    'ROTATE_REFRESH_TOKENS': False,  # If True, refresh tokens are rotated
+    'BLACKLIST_AFTER_ROTATION': True,  # Optional: Blacklist tokens after rotation
+    'ALGORITHM': 'HS256',  # Algorithm used for encoding JWTs
+    'SIGNING_KEY': 'your-secret-key',  # Secret key used to sign tokens (make sure to keep this secret)
+    'VERIFYING_KEY': None,  # Optional: Public key if you're verifying tokens with RS256
+    'AUDIENCE': None,  # Optional: Intended audience of the tokens
+    'ISSUER': None,  # Optional: Token issuer
+    'USER_ID_FIELD': 'id',  # The field to use for identifying the user in the token
+    'USER_ID_CLAIM': 'user_id',  # The claim that holds the user's ID
+    'AUTH_HEADER_TYPES': ('Bearer',),  # The header type used for authentication
+    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
+    'TOKEN_TYPE_CLAIM': 'token_type',
+}  

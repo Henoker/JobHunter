@@ -16,9 +16,17 @@ class RegisterView(APIView):
         serializer = CustomUserSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            # You can also return the newly created user data here or other response
-            return Response({"message": "User created successfully!"}, status=status.HTTP_201_CREATED)
+            # Generate JWT tokens
+            token = RefreshToken.for_user(user)
+            # Return the user data and tokens in response
+            data = serializer.data
+            data["tokens"] = {
+                "refresh": str(token),
+                "access": str(token.access_token)
+            }
+            return Response(data, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
 
 class LoginView(APIView):
     permission_classes = [AllowAny]  # Allow unauthenticated access for login
@@ -30,4 +38,3 @@ class LoginView(APIView):
             # JWT token is issued and returned in response
             return Response(serializer.validated_data, status=status.HTTP_200_OK)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
-
