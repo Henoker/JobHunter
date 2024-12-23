@@ -2,7 +2,7 @@ import React, { useReducer, useContext } from "react";
 import reducer from "./reducer";
 import { DISPLAY_ALERT } from "./actions";
 
-export const initialState = {
+const initialState = {
   isLoading: false,
   showAlert: false,
   alertText: "",
@@ -28,8 +28,8 @@ const AppProvider = ({ children }) => {
   );
 };
 // make sure use
-export const useAppContext = () => {
+const useAppContext = () => {
   return useContext(AppContext);
 };
 
-export { AppProvider };
+export { AppProvider, initialState, useAppContext };
