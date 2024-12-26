@@ -4,7 +4,7 @@ import Wrapper from "../assets/wrappers/RegisterPage";
 import { useAppContext } from "../context/appContext";
 
 const initialState = {
-  name: "",
+  username: "",
   email: "",
   password: "",
   isMember: true,
@@ -14,7 +14,7 @@ const Register = () => {
   const [values, setValues] = useState(initialState);
 
   // global context and useNavigate later
-  const { isLoading, showAlert, displayAlert } = useAppContext();
+  const { isLoading, showAlert, displayAlert, setupUser } = useAppContext();
 
   const toggleMember = () => {
     setValues({ ...values, isMember: !values.isMember });
@@ -26,12 +26,37 @@ const Register = () => {
 
   const onSubmit = (e) => {
     e.preventDefault();
-    const { name, email, password, isMember } = values;
-    if (!email || !password || (!isMember && !name)) {
+    const { username, email, password, isMember } = values;
+    if (!email || !password || (!isMember && !username)) {
       displayAlert();
       return;
     }
-    console.log(values);
+    const currentUser = { username, email, password };
+    if (isMember) {
+      // loginUser(currentUser)
+      setupUser({
+        currentUser,
+        endPoint: "login",
+        alertText: "Login successful!. Redirecting...",
+      });
+      // registerUser({
+      //   currentUser,
+      //   endPoint: 'login',
+      //   alertText: 'Login Successful! Redirecting...',
+      // })
+    } else {
+      // registerUser(currentUser)
+      setupUser({
+        currentUser,
+        endPoint: "register",
+        alertText: "User Created!. Redirecting...",
+      });
+      // registerUser({
+      //   currentUser,
+      //   endPoint: 'register',
+      //   alertText: 'User Created! Redirecting...',
+      // })
+    }
   };
 
   return (
@@ -45,8 +70,8 @@ const Register = () => {
         {!values.isMember && (
           <FormRow
             type="text"
-            name="name"
-            value={values.name}
+            name="username"
+            value={values.username}
             handleChange={handleChange}
           />
         )}

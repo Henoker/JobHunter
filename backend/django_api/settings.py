@@ -65,6 +65,7 @@ CORS_ALLOWED_ORIGINS = (
 
 CSRF_TRUSTED_ORIGINS = ["http://localhost:3000"]
 
+CSRF_COOKIE_SECURE = False
 
 
 ROOT_URLCONF = "django_api.urls"
