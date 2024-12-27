@@ -9,8 +9,8 @@ import {
   SETUP_USER_ERROR,
 } from "./actions";
 
-// const token = localStorage.getItem('token')
-// const user = localStorage.getItem('user')
+const token = localStorage.getItem("token");
+const user = localStorage.getItem("user");
 // const userLocation = localStorage.getItem('location')
 
 const initialState = {
@@ -18,8 +18,8 @@ const initialState = {
   showAlert: false,
   alertText: "",
   alertType: "",
-  user: null,
-  token: null,
+  user: user ? JSON.parse(user) : null,
+  token: token,
 };
 const AppContext = React.createContext();
 const AppProvider = ({ children }) => {
