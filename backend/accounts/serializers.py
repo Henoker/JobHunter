@@ -10,7 +10,7 @@ class CustomUserSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = User
-        fields = ['email', 'username', 'password']
+        fields = ['email', 'username', 'password', 'user_location']
 
     def create(self, validated_data):
         password = validated_data.pop('password')
@@ -25,4 +25,5 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
         # Additional fields can be added here if needed
         data['username'] = self.user.username
         data['email'] = self.user.email
+        data['user_location'] = self.user.user_location
         return data
