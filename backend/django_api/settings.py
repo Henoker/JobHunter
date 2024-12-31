@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'corsheaders',
     'rest_framework_simplejwt',
+    'djoser',
 ]
 
 MIDDLEWARE = [
@@ -50,9 +51,39 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
- 'DEFAULT_AUTHENTICATION_CLASSES': (
-    'rest_framework_simplejwt.authentication.JWTAuthentication',
- )
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+    "AUTH_HEADER_TYPES": (
+        "Bearer",
+        "JWT"),
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
+    "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
+    "SIGNING_KEY": env("SIGNING_KEY"),
+    "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
+    "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
+}
+
+DJOSER = {
+    'LOGIN_FIELD': 'email',
+    "USER_CREATE_PASSWORD_RETYPE": True,
+    "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
+    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
+    "SEND_CONFIRMATION_EMAIL": True,
+    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
+    "SET_PASSWORD_RETYPE": True,
+    "PASSWORD_RESET_CONFIRM_RETYPE": True,
+    'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': 'activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {
+        'user_create': 'users.serializers.CreateUserSerializer',
+        'user': "users.serializers.CreateUserSerializer",
+        'user_delete': "djoser.serializers.UserDeleteSerializer",      
+    },
 }
 
 
@@ -146,19 +177,3 @@ STATIC_URL = "static/"
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': timedelta(minutes=15),  # Access token expiration time
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),  # Refresh token expiration time
-    'ROTATE_REFRESH_TOKENS': False,  # If True, refresh tokens are rotated
-    'BLACKLIST_AFTER_ROTATION': True,  # Optional: Blacklist tokens after rotation
-    'ALGORITHM': 'HS256',  # Algorithm used for encoding JWTs
-    'SIGNING_KEY': 'your-secret-key',  # Secret key used to sign tokens (make sure to keep this secret)
-    'VERIFYING_KEY': None,  # Optional: Public key if you're verifying tokens with RS256
-    'AUDIENCE': None,  # Optional: Intended audience of the tokens
-    'ISSUER': None,  # Optional: Token issuer
-    'USER_ID_FIELD': 'id',  # The field to use for identifying the user in the token
-    'USER_ID_CLAIM': 'user_id',  # The claim that holds the user's ID
-    'AUTH_HEADER_TYPES': ('Bearer',),  # The header type used for authentication
-    'AUTH_TOKEN_CLASSES': ('rest_framework_simplejwt.tokens.AccessToken',),
-    'TOKEN_TYPE_CLAIM': 'token_type',
-}  
