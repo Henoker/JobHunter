@@ -62,7 +62,7 @@ SIMPLE_JWT = {
         "JWT"),
     "ACCESS_TOKEN_LIFETIME": timedelta(minutes=120),
     "REFRESH_TOKEN_LIFETIME": timedelta(days=60),
-    "SIGNING_KEY": env("SIGNING_KEY"),
+    "SIGNING_KEY": config('SECRET_KEY'),
     "AUTH_HEADER_NAME": "HTTP_AUTHORIZATION",
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
@@ -80,13 +80,20 @@ DJOSER = {
     'ACTIVATION_URL': 'activate/{uid}/{token}',
     'SEND_ACTIVATION_EMAIL': True,
     'SERIALIZERS': {
-        'user_create': 'users.serializers.CreateUserSerializer',
-        'user': "users.serializers.CreateUserSerializer",
+        'user_create': 'accounts.serializers.CreateUserSerializer',
+        'user': "accounts.serializers.CreateUserSerializer",
         'user_delete': "djoser.serializers.UserDeleteSerializer",      
     },
 }
 
-
+EMAIL_HOST = config("EMAIL_HOST")
+EMAIL_USE_TLS = True
+EMAIL_PORT = config("EMAIL_PORT")
+EMAIL_HOST_USER = config("EMAIL_HOST_USER")
+EMAIL_HOST_PASSWORD = config("EMAIL_HOST_PASSWORD")
+DEFAULT_FROM_EMAIL = "info@job-hunter.com"
+DOMAIN = config("DOMAIN")
+SITE_NAME = "Job Hunter"
 
 AUTH_USER_MODEL = "accounts.CustomUser"
 
