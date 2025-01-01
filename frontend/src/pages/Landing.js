@@ -18,7 +18,8 @@ const Landing = () => {
             This app will help you in tracking the current jobs that you are
             persuing.
           </p>
-          <button className="btn btn-hero">Login/Register</button>
+          <button className="btn btn-hero">Login</button>{" "}
+          <button className="btn btn-hero">Register</button>
         </div>
         {/* Second Page */}
         <img src={main} alt="Job Hunt" className="img main-img" />
