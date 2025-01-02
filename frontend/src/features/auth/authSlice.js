@@ -133,7 +133,8 @@ export const authSlice = createSlice({
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = false;
-      state.message = false;
+      state.message = ""; // Reset to an empty string
+      state.user = null;
     },
   },
   extraReducers: (builder) => {

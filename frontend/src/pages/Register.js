@@ -72,8 +72,7 @@ const Register = () => {
       setTimeout(() => dispatch(toggleAlert()), 3000);
     }
 
-    if (isSuccess || user) {
-      navigate("/");
+    if (isSuccess) {
       dispatch(
         displayAlert({
           alertType: "success",
@@ -82,6 +81,8 @@ const Register = () => {
         })
       );
       setTimeout(() => dispatch(toggleAlert()), 3000);
+
+      navigate("/");
     }
 
     dispatch(reset());

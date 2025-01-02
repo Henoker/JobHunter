@@ -1,9 +1,10 @@
 import Logo from "../components/Logo";
 import main from "../assets/images/main.svg";
 import Wrapper from "../assets/wrappers/LandingPage";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Landing = () => {
+  const navigate = useNavigate();
   return (
     <Wrapper>
       <nav>
@@ -19,12 +20,15 @@ const Landing = () => {
             This app will help you in tracking the current jobs that you are
             persuing.
           </p>
-          <Link to="/login" className="btn btn-hero">
+          <button onClick={() => navigate("/login")} className="btn btn-hero">
             Login
-          </Link>{" "}
-          <Link to="/register" className="btn btn-hero">
+          </button>{" "}
+          <button
+            onClick={() => navigate("/register")}
+            className="btn btn-hero"
+          >
             Register
-          </Link>
+          </button>
         </div>
         {/* Second Page */}
         <img src={main} alt="Job Hunt" className="img main-img" />
