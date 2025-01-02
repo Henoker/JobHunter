@@ -1,4 +1,4 @@
-import { Error, Landing, Register, ProtectedRoute } from "./pages";
+import { Error, Landing, Register, Login, ProtectedRoute } from "./pages";
 // import {
 //   AddJob,
 //   AllJobs,
@@ -14,6 +14,9 @@ function App() {
       <Routes>
         <Route>
           <Route path="/" element={<Landing />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="*" element={<Error />} />
         </Route>
       </Routes>
     </BrowserRouter>

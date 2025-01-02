@@ -1,102 +1,144 @@
 import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import { displayAlert, toggleAlert } from "../features/alerts/alertSlice";
+import { register, reset } from "../features/auth/authSlice";
 import { Logo, FormRow, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
-import { useAppContext } from "../context/appContext";
-
-const initialState = {
-  username: "",
-  email: "",
-  password: "",
-  isMember: true,
-};
 
 const Register = () => {
-  const [values, setValues] = useState(initialState);
+  const [formData, setFormData] = useState({
+    first_name: "",
+    last_name: "",
+    email: "",
+    password: "",
+    re_password: "",
+  });
+  const { first_name, last_name, email, password, re_password } = formData;
 
-  // global context and useNavigate later
-  const { isLoading, showAlert, displayAlert, setupUser } = useAppContext();
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
-  const toggleMember = () => {
-    setValues({ ...values, isMember: !values.isMember });
-  };
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
 
   const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const onSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { username, email, password, isMember } = values;
-    if (!email || !password || (!isMember && !username)) {
-      displayAlert();
+
+    if (!first_name || !last_name || !email || !password || !re_password) {
+      dispatch(
+        displayAlert({
+          alertType: "danger",
+          alertText: "All fields are required",
+        })
+      );
+      setTimeout(() => dispatch(toggleAlert()), 3000);
       return;
     }
-    const currentUser = { username, email, password };
-    if (isMember) {
-      // loginUser(currentUser)
-      setupUser({
-        currentUser,
-        endPoint: "login",
-        alertText: "Login successful!. Redirecting...",
-      });
-      // registerUser({
-      //   currentUser,
-      //   endPoint: 'login',
-      //   alertText: 'Login Successful! Redirecting...',
-      // })
-    } else {
-      // registerUser(currentUser)
-      setupUser({
-        currentUser,
-        endPoint: "register",
-        alertText: "User Created!. Redirecting...",
-      });
-      // registerUser({
-      //   currentUser,
-      //   endPoint: 'register',
-      //   alertText: 'User Created! Redirecting...',
-      // })
+
+    if (password !== re_password) {
+      dispatch(
+        displayAlert({
+          alertType: "danger",
+          alertText: "Passwords do not match",
+        })
+      );
+      setTimeout(() => dispatch(toggleAlert()), 3000);
+      return;
     }
+
+    const userData = {
+      first_name,
+      last_name,
+      email,
+      password,
+      re_password,
+    };
+
+    dispatch(register(userData));
   };
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(displayAlert({ alertType: "danger", alertText: message }));
+      setTimeout(() => dispatch(toggleAlert()), 3000);
+    }
+
+    if (isSuccess || user) {
+      navigate("/");
+      dispatch(
+        displayAlert({
+          alertType: "success",
+          alertText:
+            "Registration successful! Check your email for activation instructions.",
+        })
+      );
+      setTimeout(() => dispatch(toggleAlert()), 3000);
+    }
+
+    dispatch(reset());
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   return (
     <Wrapper className="full-page">
-      <form className="form" onSubmit={onSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <Logo />
-        <h3>{values.isMember ? "Login" : "Register"}</h3>
-        {showAlert && <Alert />}
-
-        {/* name field */}
-        {!values.isMember && (
-          <FormRow
-            type="text"
-            name="username"
-            value={values.username}
-            handleChange={handleChange}
-          />
-        )}
-
-        {/* email input */}
+        <h3>Register</h3>
+        <Alert />
+        <FormRow
+          type="text"
+          name="first_name"
+          value={first_name}
+          handleChange={handleChange}
+          labelText="First Name"
+        />
+        <FormRow
+          type="text"
+          name="last_name"
+          value={last_name}
+          handleChange={handleChange}
+          labelText="Last Name"
+        />
         <FormRow
           type="email"
           name="email"
-          value={values.email}
+          value={email}
           handleChange={handleChange}
+          labelText="Email"
         />
-        {/* password input */}
         <FormRow
           type="password"
           name="password"
-          value={values.password}
+          value={password}
           handleChange={handleChange}
+          labelText="Password"
+        />
+        <FormRow
+          type="password"
+          name="re_password"
+          value={re_password}
+          handleChange={handleChange}
+          labelText="Retype Password"
         />
         <button type="submit" className="btn btn-block" disabled={isLoading}>
-          submit
+          Submit
         </button>
         <p>
-          {values.isMember ? "Not a member yet?" : "Already a member?"}
-          <button type="button" onClick={toggleMember} className="member-btn">
-            {values.isMember ? "Register" : "Login"}
+          Already a member?{" "}
+          <button
+            type="button"
+            onClick={() => navigate("/login")}
+            className="member-btn"
+          >
+            Login
           </button>
         </p>
       </form>

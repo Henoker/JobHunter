@@ -2,26 +2,30 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   showAlert: false,
-  alertText: "",
   alertType: "",
+  alertText: "",
 };
 
-const alertsSlice = createSlice({
+const alertSlice = createSlice({
   name: "alerts",
   initialState,
   reducers: {
-    displayAlert: (state) => {
+    displayAlert: (state, action) => {
       state.showAlert = true;
-      state.alertText = "This is an alert!";
-      state.alertType = "success"; // You can customize this
+      state.alertType = action.payload.alertType || "error"; // Default to 'error'
+      state.alertText = action.payload.alertText || "Something went wrong!";
     },
     clearAlert: (state) => {
       state.showAlert = false;
-      state.alertText = "";
       state.alertType = "";
+      state.alertText = "";
+    },
+    toggleAlert: (state) => {
+      state.showAlert = !state.showAlert; // Toggles the visibility
     },
   },
 });
 
-export const { displayAlert, clearAlert } = alertsSlice.actions;
-export default alertsSlice.reducer;
+export const { displayAlert, clearAlert, toggleAlert } = alertSlice.actions;
+
+export default alertSlice.reducer;

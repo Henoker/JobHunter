@@ -1,6 +1,7 @@
 import Logo from "../components/Logo";
 import main from "../assets/images/main.svg";
 import Wrapper from "../assets/wrappers/LandingPage";
+import { Link } from "react-router-dom";
 
 const Landing = () => {
   return (
@@ -18,8 +19,12 @@ const Landing = () => {
             This app will help you in tracking the current jobs that you are
             persuing.
           </p>
-          <button className="btn btn-hero">Login</button>{" "}
-          <button className="btn btn-hero">Register</button>
+          <Link to="/login" className="btn btn-hero">
+            Login
+          </Link>{" "}
+          <Link to="/register" className="btn btn-hero">
+            Register
+          </Link>
         </div>
         {/* Second Page */}
         <img src={main} alt="Job Hunt" className="img main-img" />
