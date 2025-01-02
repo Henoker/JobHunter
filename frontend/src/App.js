@@ -1,4 +1,4 @@
-import { Error, Landing, Register, Login, ProtectedRoute } from "./pages";
+import { Error, Landing, Register, Login, Activation } from "./pages";
 // import {
 //   AddJob,
 //   AllJobs,
@@ -15,6 +15,7 @@ function App() {
         <Route>
           <Route path="/" element={<Landing />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/activate/:uid/:token" element={<Activation />} />
           <Route path="/login" element={<Login />} />
           <Route path="*" element={<Error />} />
         </Route>
