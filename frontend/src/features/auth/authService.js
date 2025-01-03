@@ -34,8 +34,10 @@ const login = async (userData) => {
 
   const response = await axios.post(LOGIN_URL, userData, config);
 
-  if (response.data) {
+  if (response.data && response.data.access) {
     localStorage.setItem("user", JSON.stringify(response.data));
+  } else {
+    throw new Error("Invalid login response. Tokens missing.");
   }
 
   return response.data;
@@ -102,8 +104,10 @@ const getUserInfo = async (accessToken) => {
     },
   };
 
-  const response = await axios.get(GET_USER_INFO, config);
-
+  const response = await axios.get(
+    `${BACKEND_DOMAIN}/api/v1/auth/users/me/`,
+    config
+  );
   return response.data;
 };
 

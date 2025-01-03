@@ -1,55 +1,95 @@
-import { useState } from "react";
-import { displayAlert } from "../features/alerts/alertSlice";
-import { useDispatch } from "react-redux";
+import { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { Logo, FormRow } from "../components";
+import { displayAlert, toggleAlert } from "../features/alerts/alertSlice";
+import { login, reset } from "../features/auth/authSlice";
+import { Logo, FormRow, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
 
-const initialState = {
-  email: "",
-  password: "",
-};
-
 const Login = () => {
-  const [values, setValues] = useState(initialState);
+  const [formData, setFormData] = useState({
+    email: "",
+    password: "",
+  });
+
+  const { email, password } = formData;
+
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const { user, isLoading, isError, isSuccess, message } = useSelector(
+    (state) => state.auth
+  );
+
   const handleChange = (e) => {
-    setValues({ ...values, [e.target.name]: e.target.value });
+    setFormData((prev) => ({
+      ...prev,
+      [e.target.name]: e.target.value,
+    }));
   };
 
-  const onSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    const { email, password } = values;
 
     if (!email || !password) {
-      dispatch(displayAlert());
+      dispatch(
+        displayAlert({
+          alertType: "danger",
+          alertText: "All fields are required",
+        })
+      );
+      setTimeout(() => dispatch(toggleAlert()), 3000);
       return;
     }
 
-    const currentUser = { email, password };
-    // Call login function here
-    // dispatch(login(currentUser));
-    console.log("Login submitted", currentUser);
+    const userData = {
+      email,
+      password,
+    };
+
+    dispatch(login(userData));
   };
+
+  useEffect(() => {
+    if (isError) {
+      dispatch(displayAlert({ alertType: "danger", alertText: message }));
+      setTimeout(() => dispatch(toggleAlert()), 3000);
+    }
+
+    if (isSuccess && user && user.access) {
+      dispatch(
+        displayAlert({
+          alertType: "success",
+          alertText: "You are successfully logged in as a user.",
+        })
+      );
+      setTimeout(() => dispatch(toggleAlert()), 3000);
+
+      navigate("/dashboard");
+    }
+
+    dispatch(reset());
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   return (
     <Wrapper className="full-page">
-      <form className="form" onSubmit={onSubmit}>
+      <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>Login</h3>
+        <Alert />
         <FormRow
           type="email"
           name="email"
-          value={values.email}
+          value={email}
           handleChange={handleChange}
+          labelText="Email"
         />
         <FormRow
           type="password"
           name="password"
-          value={values.password}
+          value={password}
           handleChange={handleChange}
+          labelText="Password"
         />
         <button type="submit" className="btn btn-block">
           Submit
@@ -61,7 +101,7 @@ const Login = () => {
             onClick={() => navigate("/register")}
             className="member-btn"
           >
-            Register
+            Login
           </button>
         </p>
       </form>
