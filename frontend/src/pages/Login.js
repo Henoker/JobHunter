@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { displayAlert, toggleAlert } from "../features/alerts/alertSlice";
 import { login, reset } from "../features/auth/authSlice";
 import { Logo, FormRow, Alert } from "../components";
@@ -103,6 +103,7 @@ const Login = () => {
           >
             Login
           </button>
+          <Link to="/reset-password">Forget Password ?</Link>
         </p>
       </form>
     </Wrapper>

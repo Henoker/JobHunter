@@ -1,6 +1,7 @@
 import React, { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserInfo } from "../features/auth/authSlice";
+import Wrapper from ".././assets/wrappers/SharedLayout";
 
 const Dashboard = () => {
   const { userInfo, user } = useSelector((state) => state.auth);
@@ -17,9 +18,11 @@ const Dashboard = () => {
   }
 
   return (
-    <div>
-      <h1>Welcome, {userInfo.first_name} </h1>
-    </div>
+    <Wrapper>
+      <main className="dashboard">
+        <h1>Welcome, {userInfo.first_name} </h1>
+      </main>
+    </Wrapper>
   );
 };
 
