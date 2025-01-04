@@ -6,6 +6,7 @@ import Login from "./Login";
 import Activation from "./Activation";
 import Dashboard from "./Dashboard";
 import ResetPassword from "./ResetPassword";
+import ResetPasswordConfirm from "./ResetPasswordConfirm";
 
 export {
   Error,
@@ -16,4 +17,5 @@ export {
   Dashboard,
   ProtectedRoute,
   ResetPassword,
+  ResetPasswordConfirm,
 };
