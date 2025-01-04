@@ -5,6 +5,7 @@ import ProtectedRoute from "./ProtectedRoute";
 import Login from "./Login";
 import Activation from "./Activation";
 import Dashboard from "./Dashboard";
+import ResetPassword from "./ResetPassword";
 
 export {
   Error,
@@ -14,4 +15,5 @@ export {
   Activation,
   Dashboard,
   ProtectedRoute,
+  ResetPassword,
 };

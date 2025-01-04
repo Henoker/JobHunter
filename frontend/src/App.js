@@ -5,6 +5,7 @@ import {
   Login,
   Activation,
   Dashboard,
+  ResetPassword,
 } from "./pages";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 
@@ -17,6 +18,7 @@ function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/activate/:uid/:token" element={<Activation />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
         <Route path="*" element={<Error />} />
       </Routes>
     </BrowserRouter>
