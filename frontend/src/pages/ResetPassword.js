@@ -54,7 +54,7 @@ const ResetPassword = () => {
       setTimeout(() => dispatch(toggleAlert()), 3000);
     }
 
-    if (isSuccess && user && user.access) {
+    if (isSuccess) {
       dispatch(
         displayAlert({
           alertType: "success",
