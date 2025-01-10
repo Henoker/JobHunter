@@ -1,10 +1,10 @@
-import { useAppContext } from "../context/appContext";
-import NavLinks from "./NavLinks";
+// import { useAppContext } from "../context/appContext";
+// import NavLinks from "./NavLinks";
 import Logo from "../components/Logo";
 import Wrapper from "../assets/wrappers/BigSidebar";
 
 const BigSidebar = () => {
-  const { showSidebar } = useAppContext();
+  // const { showSidebar } = useAppContext();
   return (
     <Wrapper>
       <div className="sidebar-container ">
@@ -17,7 +17,7 @@ const BigSidebar = () => {
           <header>
             <Logo />
           </header>
-          <NavLinks />
+          {/* <NavLinks /> */}
         </div>
       </div>
     </Wrapper>
