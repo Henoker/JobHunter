@@ -65,7 +65,7 @@ const Login = () => {
       );
       setTimeout(() => dispatch(toggleAlert()), 3000);
 
-      navigate("/dashboard");
+      navigate("/");
     }
 
     dispatch(reset());
