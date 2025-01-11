@@ -2,33 +2,44 @@ import Wrapper from "../assets/wrappers/SmallSidebar";
 import { FaTimes } from "react-icons/fa";
 import { useSelector, useDispatch } from "react-redux";
 import { toggleSidebar } from "../features/sidebarSlice";
-// import { useAppContext } from '../context/appContext'
 import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 
 export const SmallSidebar = () => {
-  //   const { showSidebar, toggleSidebar } = useAppContext()
   const showSidebar = useSelector((state) => state.sidebar.showSidebar);
   const dispatch = useDispatch();
+
+  const handleToggleSidebar = () => {
+    console.log("Toggling sidebar");
+    dispatch(toggleSidebar());
+  };
+
   return (
     <Wrapper>
-      {/* <div className="sidebar-container show-sidebar"> */}
       <div
         className={
           showSidebar ? "sidebar-container show-sidebar" : "sidebar-container"
         }
       >
         <div className="content">
-          <button
-            className="close-btn"
-            onClick={() => dispatch(toggleSidebar())}
-          >
+          {/* <button className="close-btn" onClick={handleToggleSidebar}>
             <FaTimes />
+          </button> */}
+          <button
+            style={{
+              background: "red",
+              color: "white",
+              position: "relative",
+              zIndex: 9999,
+            }}
+            onClick={() => console.log("Button clicked")}
+          >
+            Click Me
           </button>
           <header>
             <Logo />
           </header>
-          <NavLinks toggleSidebar={toggleSidebar} />
+          <NavLinks toggleSidebar={handleToggleSidebar} />
         </div>
       </div>
     </Wrapper>

@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import Wrapper from "../assets/wrappers/Navbar";
 import { useSelector, useDispatch } from "react-redux";
 import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
+import { toggleSidebar } from "../features/sidebarSlice";
 // import { useAppContext } from '../context/appContext';
 import { getUserInfo } from "../features/auth/authSlice";
 import Logo from "./Logo";
@@ -12,6 +13,11 @@ const NavBar = () => {
   const { userInfo, user } = useSelector((state) => state.auth);
   const dispatch = useDispatch();
   // const { toggleSidebar, logoutUser, user } = useAppContext()
+
+  const handleToggleSidebar = () => {
+    console.log("Toggling sidebar");
+    dispatch(toggleSidebar());
+  };
   useEffect(() => {
     if (user && user.access && !userInfo.first_name) {
       dispatch(getUserInfo());
@@ -24,7 +30,11 @@ const NavBar = () => {
   return (
     <Wrapper>
       <div className="nav-center">
-        <button type="button" className="toggle-btn">
+        <button
+          type="button"
+          className="toggle-btn"
+          onClick={handleToggleSidebar}
+        >
           <FaAlignLeft />
         </button>
         {/* <button 
