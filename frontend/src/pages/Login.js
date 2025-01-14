@@ -51,6 +51,8 @@ const Login = () => {
   };
 
   useEffect(() => {
+    console.log({ isError, isSuccess, user, message });
+
     if (isError) {
       dispatch(displayAlert({ alertType: "danger", alertText: message }));
       setTimeout(() => dispatch(toggleAlert()), 3000);
@@ -65,7 +67,7 @@ const Login = () => {
       );
       setTimeout(() => dispatch(toggleAlert()), 3000);
 
-      navigate("/");
+      navigate("/"); // Redirect to the protected dashboard
     }
 
     dispatch(reset());
@@ -96,13 +98,9 @@ const Login = () => {
         </button>
         <p>
           Not a member yet?{" "}
-          <button
-            type="button"
-            onClick={() => navigate("/register")}
-            className="member-btn"
-          >
+          <Link to="/register" className="member-btn">
             Register
-          </button>
+          </Link>
         </p>
         <p>
           <Link to="/reset-password">Forget Password ?</Link>
