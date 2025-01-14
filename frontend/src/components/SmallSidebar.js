@@ -22,19 +22,8 @@ export const SmallSidebar = () => {
         }
       >
         <div className="content">
-          {/* <button className="close-btn" onClick={handleToggleSidebar}>
+          <button className="close-btn" onClick={handleToggleSidebar}>
             <FaTimes />
-          </button> */}
-          <button
-            style={{
-              background: "red",
-              color: "white",
-              position: "relative",
-              zIndex: 9999,
-            }}
-            onClick={() => console.log("Button clicked")}
-          >
-            Click Me
           </button>
           <header>
             <Logo />

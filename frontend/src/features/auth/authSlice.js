@@ -130,11 +130,12 @@ export const authSlice = createSlice({
   initialState,
   reducers: {
     reset: (state) => {
+      state.user = null;
+      state.userInfo = {};
       state.isLoading = false;
       state.isError = false;
       state.isSuccess = false;
-      state.message = ""; // Reset to an empty string
-      state.user = null;
+      state.message = "";
     },
   },
   extraReducers: (builder) => {
@@ -171,6 +172,12 @@ export const authSlice = createSlice({
       })
       .addCase(logout.fulfilled, (state) => {
         state.user = null;
+        state.userInfo = {};
+        state.isLoading = false;
+        state.isError = false;
+        state.isSuccess = false;
+        state.message = "";
+        localStorage.removeItem("user");
       })
       .addCase(activate.pending, (state) => {
         state.isLoading = true;
