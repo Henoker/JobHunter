@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 import { displayAlert, toggleAlert } from "../features/alerts/alertSlice";
 import { register, reset } from "../features/auth/authSlice";
 import { Logo, FormRow, Alert } from "../components";
@@ -134,13 +134,9 @@ const Register = () => {
         </button>
         <p>
           Already a member?{" "}
-          <button
-            type="button"
-            onClick={() => navigate("/login")}
-            className="member-btn"
-          >
+          <Link to="/login" className="member-btn">
             Login
-          </button>
+          </Link>
         </p>
       </form>
     </Wrapper>
