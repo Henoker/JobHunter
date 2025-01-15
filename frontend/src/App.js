@@ -10,6 +10,7 @@ import {
   ProtectedRoute,
 } from "./pages";
 import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 import {
   AddJob,
   AllJobs,
@@ -18,6 +19,7 @@ import {
   Stats,
 } from "./pages/dashboard/";
 function App() {
+  const { user } = useSelector((state) => state.auth);
   return (
     <BrowserRouter>
       <Routes>
@@ -25,7 +27,7 @@ function App() {
           path="/"
           element={
             <ProtectedRoute>
-              <SharedLayout />
+              <SharedLayout key={user ? user.id : "guest"} />
             </ProtectedRoute>
           }
         >

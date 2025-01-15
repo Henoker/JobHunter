@@ -51,7 +51,7 @@ const Login = () => {
   };
 
   useEffect(() => {
-    console.log({ isError, isSuccess, user, message });
+    console.log("Auth state:", { user, isError, isSuccess, message });
 
     if (isError) {
       dispatch(displayAlert({ alertType: "danger", alertText: message }));
