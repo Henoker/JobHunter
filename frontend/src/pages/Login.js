@@ -21,6 +21,29 @@ const Login = () => {
     (state) => state.auth
   );
 
+  useEffect(() => {
+    console.log("Auth state:", { user, isError, isSuccess, message });
+
+    if (isError) {
+      dispatch(displayAlert({ alertType: "danger", alertText: message }));
+      setTimeout(() => dispatch(toggleAlert()), 3000);
+    }
+
+    if (isSuccess && user && user.access) {
+      dispatch(
+        displayAlert({
+          alertType: "success",
+          alertText: "You are successfully logged in as a user.",
+        })
+      );
+      setTimeout(() => dispatch(toggleAlert()), 3000);
+
+      navigate("/"); // Redirect to the protected dashboard
+    }
+
+    dispatch(reset());
+  }, [isError, isSuccess, user, message, navigate, dispatch]);
+
   const handleChange = (e) => {
     setFormData((prev) => ({
       ...prev,
@@ -49,29 +72,6 @@ const Login = () => {
 
     dispatch(login(userData));
   };
-
-  useEffect(() => {
-    console.log("Auth state:", { user, isError, isSuccess, message });
-
-    if (isError) {
-      dispatch(displayAlert({ alertType: "danger", alertText: message }));
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-    }
-
-    if (isSuccess && user && user.access) {
-      dispatch(
-        displayAlert({
-          alertType: "success",
-          alertText: "You are successfully logged in as a user.",
-        })
-      );
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-
-      navigate("/"); // Redirect to the protected dashboard
-    }
-
-    dispatch(reset());
-  }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   return (
     <Wrapper className="full-page">
