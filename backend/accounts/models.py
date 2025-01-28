@@ -1,46 +1,65 @@
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.utils.translation import gettext_lazy as _
-from .managers import CustomUserManager
+from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.base_user import BaseUserManager
 
-# Create your models here.
+from django_rest_passwordreset.signals import reset_password_token_created
+from django.dispatch import receiver 
+from django.urls import reverse 
+from django.template.loader import render_to_string
+from django.core.mail import EmailMultiAlternatives
+from django.utils.html import strip_tags
 
+class CustomUserManager(BaseUserManager): 
+    def create_user(self, email, password=None, **extra_fields ): 
+        if not email: 
+            raise ValueError('Email is a required field')
+        
+        email = self.normalize_email(email)
+        user = self.model(email=email, **extra_fields)
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
 
-class CustomUser(AbstractBaseUser, PermissionsMixin):
-    first_name = models.CharField(_("First Name"), max_length=100)
-    last_name = models.CharField(_("Last Name"), max_length=100)
-    email = models.EmailField(_("Email Address"), max_length=254, unique=True)
-    user_location = models.CharField(max_length=255, blank=True, null=True, default="myCity") 
-    is_staff = models.BooleanField(default=False)
-    is_active = models.BooleanField(default=False)
-    date_joined =  models.DateTimeField(auto_now_add=True)
+    def create_superuser(self,email, password=None, **extra_fields): 
+        extra_fields.setdefault('is_staff', True)
+        extra_fields.setdefault('is_superuser', True)
+        return self.create_user(email, password, **extra_fields)
 
-    USERNAME_FIELD = "email"
-    REQUIRED_FIELDS = ["first_name", "last_name"]
+class CustomUser(AbstractUser):
+    email = models.EmailField(max_length=200, unique=True)
+    birthday = models.DateField(null=True, blank=True)
+    username = models.CharField(max_length=200, null=True, blank=True)
 
     objects = CustomUserManager()
 
-    class Meta:
-        verbose_name = _("User")
-        verbose_name_plural = _("Users")
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = []
 
-    def __str__(self):
-        return self.email
-    
-    @property
-    def get_full_name(self):
-        return f"{self.first_name} {self.last_name}"
 
-# from django.contrib.auth.models import AbstractUser
-# from django.db import models
+@receiver(reset_password_token_created)
+def password_reset_token_created(reset_password_token, *args, **kwargs):
+    sitelink = "http://localhost:5173/"
+    token = "{}".format(reset_password_token.key)
+    full_link = str(sitelink)+str("password-reset/")+str(token)
 
-# class CustomUser(AbstractUser):
-#     email = models.EmailField(unique=True)
-#     user_location = models.CharField(max_length=255, blank=True, null=True, default="myCity") 
+    print(token)
+    print(full_link)
 
-#     USERNAME_FIELD = 'email'
-#     REQUIRED_FIELDS = ['username']
+    context = {
+        'full_link': full_link,
+        'email_adress': reset_password_token.user.email
+    }
 
-#     def __str__(self):
-#         return self.email
+    html_message = render_to_string("backend/email.html", context=context)
+    plain_message = strip_tags(html_message)
+
+    msg = EmailMultiAlternatives(
+        subject = "Request for resetting password for {title}".format(title=reset_password_token.user.email), 
+        body=plain_message,
+        from_email = "sender@example.com", 
+        to=[reset_password_token.user.email]
+    )
+
+    msg.attach_alternative(html_message, "text/html")
+    msg.send()
 

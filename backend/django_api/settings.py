@@ -34,8 +34,8 @@ INSTALLED_APPS = [
     # third party
     'rest_framework',
     'corsheaders',
-    'rest_framework_simplejwt',
-    'djoser',
+    'knox', 
+    'django_rest_passwordreset',
 ]
 
 MIDDLEWARE = [
@@ -51,9 +51,7 @@ MIDDLEWARE = [
 ]
 
 REST_FRAMEWORK = {
-    'DEFAULT_AUTHENTICATION_CLASSES': (
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
-    ),
+    'DEFAULT_AUTHENTICATION_CLASSES': ('knox.auth.TokenAuthentication',)
 }
 
 SIMPLE_JWT = {
@@ -67,24 +65,7 @@ SIMPLE_JWT = {
     "AUTH_TOKEN_CLASSES": ("rest_framework_simplejwt.tokens.AccessToken",),
 }
 
-DJOSER = {
-    'LOGIN_FIELD': 'email',
-    "USER_CREATE_PASSWORD_RETYPE": True,
-    "USERNAME_CHANGED_EMAIL_CONFIRMATION": True,
-    "PASSWORD_CHANGED_EMAIL_CONFIRMATION": True,
-    "SEND_CONFIRMATION_EMAIL": True,
-    "PASSWORD_RESET_CONFIRM_URL": "password/reset/confirm/{uid}/{token}",
-    "SET_PASSWORD_RETYPE": True,
-    "PASSWORD_RESET_CONFIRM_RETYPE": True,
-    'USERNAME_RESET_CONFIRM_URL': 'username/reset/confirm/{uid}/{token}',
-    'ACTIVATION_URL': 'activate/{uid}/{token}',
-    'SEND_ACTIVATION_EMAIL': True,
-    'SERIALIZERS': {
-        'user_create': 'accounts.serializers.CreateUserSerializer',
-        'user': "accounts.serializers.CreateUserSerializer",
-        'user_delete': "djoser.serializers.UserDeleteSerializer",      
-    },
-}
+
 
 EMAIL_HOST = config("EMAIL_HOST")
 EMAIL_USE_TLS = True
