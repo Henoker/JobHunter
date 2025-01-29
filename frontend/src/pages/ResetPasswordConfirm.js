@@ -1,10 +1,8 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { resetPasswordConfirm, reset } from "../features/auth/authSlice";
-import { displayAlert, toggleAlert } from "../features/alerts/alertSlice";
 import Wrapper from "../assets/wrappers/RegisterPage";
 import { FormRow, Logo, Alert } from "../components";
+import React from "react";
 
 const ResetPasswordConfirm = () => {
   const { uid, token } = useParams();
@@ -16,11 +14,6 @@ const ResetPasswordConfirm = () => {
   const { new_password, re_new_password } = formData;
 
   const navigate = useNavigate();
-  const dispatch = useDispatch();
-
-  const { isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -38,29 +31,7 @@ const ResetPasswordConfirm = () => {
       new_password,
       re_new_password,
     };
-
-    dispatch(resetPasswordConfirm(userData));
   };
-
-  useEffect(() => {
-    if (isError) {
-      dispatch(displayAlert({ alertType: "danger", alertText: message }));
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-    }
-
-    if (isSuccess) {
-      navigate("/");
-      dispatch(
-        displayAlert({
-          alertType: "success",
-          alertText: "Your password was reset successfully",
-        })
-      );
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-    }
-
-    dispatch(reset());
-  }, [isError, isSuccess, message, navigate, dispatch]);
 
   return (
     <Wrapper className="full-page">
@@ -82,7 +53,7 @@ const ResetPasswordConfirm = () => {
           handleChange={handleChange}
           labelText="Confirm Password"
         />
-        <button type="submit" className="btn btn-block" disabled={isLoading}>
+        <button type="submit" className="btn btn-block" disabled>
           Reset Password
         </button>
       </form>

@@ -1,8 +1,5 @@
-import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { React, useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { displayAlert, toggleAlert } from "../features/alerts/alertSlice";
-import { login, reset } from "../features/auth/authSlice";
 import { Logo, FormRow, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
 
@@ -14,35 +11,34 @@ const Login = () => {
 
   const { email, password } = formData;
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  // const { user, isLoading, isError, isSuccess, message } = useSelector(
+  //   (state) => state.auth
+  // );
 
-  useEffect(() => {
-    console.log("Auth state:", { user, isError, isSuccess, message });
+  // useEffect(() => {
+  //   console.log("Auth state:", { user, isError, isSuccess, message });
 
-    if (isError) {
-      dispatch(displayAlert({ alertType: "danger", alertText: message }));
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-    }
+  //   if (isError) {
+  //     dispatch(displayAlert({ alertType: "danger", alertText: message }));
+  //     setTimeout(() => dispatch(toggleAlert()), 3000);
+  //   }
 
-    if (isSuccess && user && user.access) {
-      dispatch(
-        displayAlert({
-          alertType: "success",
-          alertText: "You are successfully logged in as a user.",
-        })
-      );
-      setTimeout(() => dispatch(toggleAlert()), 3000);
+  //   if (isSuccess && user && user.access) {
+  //     dispatch(
+  //       displayAlert({
+  //         alertType: "success",
+  //         alertText: "You are successfully logged in as a user.",
+  //       })
+  //     );
+  //     setTimeout(() => dispatch(toggleAlert()), 3000);
 
-      navigate("/"); // Redirect to the protected dashboard
-    }
+  //     navigate("/"); // Redirect to the protected dashboard
+  //   }
 
-    dispatch(reset());
-  }, [isError, isSuccess, user, message, navigate, dispatch]);
+  //   dispatch(reset());
+  // }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -53,24 +49,6 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!email || !password) {
-      dispatch(
-        displayAlert({
-          alertType: "danger",
-          alertText: "All fields are required",
-        })
-      );
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-      return;
-    }
-
-    const userData = {
-      email,
-      password,
-    };
-
-    dispatch(login(userData));
   };
 
   return (

@@ -1,15 +1,15 @@
 import React from "react";
-import { useSelector } from "react-redux";
+// import { useSelector } from "react-redux";
 
 const Alert = () => {
-  const { alertType, alertText, showAlert } = useSelector(
-    (state) => state.alerts
-  );
+  // const { alertType, alertText, showAlert } = useSelector(
+  //   (state) => state.alerts
+  // );
 
   // Only render the alert if `showAlert` is true
-  if (!showAlert) return null;
+  // if (!showAlert) return null;
 
-  return <div className={`alert alert-${alertType}`}>{alertText}</div>;
+  return <div className="alert alert-danger">alert goes here</div>;
 };
 
 export default Alert;

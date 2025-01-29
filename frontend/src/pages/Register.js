@@ -1,8 +1,5 @@
 import { useState, useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import { displayAlert, toggleAlert } from "../features/alerts/alertSlice";
-import { register, reset } from "../features/auth/authSlice";
 import { Logo, FormRow, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
 
@@ -16,12 +13,11 @@ const Register = () => {
   });
   const { first_name, last_name, email, password, re_password } = formData;
 
-  const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const { user, isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  // const { user, isLoading, isError, isSuccess, message } = useSelector(
+  //   (state) => state.auth
+  // );
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -32,61 +28,29 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
-    if (!first_name || !last_name || !email || !password || !re_password) {
-      dispatch(
-        displayAlert({
-          alertType: "danger",
-          alertText: "All fields are required",
-        })
-      );
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-      return;
-    }
-
-    if (password !== re_password) {
-      dispatch(
-        displayAlert({
-          alertType: "danger",
-          alertText: "Passwords do not match",
-        })
-      );
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-      return;
-    }
-
-    const userData = {
-      first_name,
-      last_name,
-      email,
-      password,
-      re_password,
-    };
-
-    dispatch(register(userData));
   };
 
-  useEffect(() => {
-    if (isError) {
-      dispatch(displayAlert({ alertType: "danger", alertText: message }));
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-    }
+  // useEffect(() => {
+  //   if (isError) {
+  //     dispatch(displayAlert({ alertType: "danger", alertText: message }));
+  //     setTimeout(() => dispatch(toggleAlert()), 3000);
+  //   }
 
-    if (isSuccess) {
-      dispatch(
-        displayAlert({
-          alertType: "success",
-          alertText:
-            "Registration successful! Check your email for activation instructions.",
-        })
-      );
-      setTimeout(() => dispatch(toggleAlert()), 3000);
+  //   if (isSuccess) {
+  //     dispatch(
+  //       displayAlert({
+  //         alertType: "success",
+  //         alertText:
+  //           "Registration successful! Check your email for activation instructions.",
+  //       })
+  //     );
+  //     setTimeout(() => dispatch(toggleAlert()), 3000);
 
-      navigate("/");
-    }
+  //     navigate("/");
+  //   }
 
-    dispatch(reset());
-  }, [isError, isSuccess, user, message, navigate, dispatch]);
+  //   dispatch(reset());
+  // }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   return (
     <Wrapper className="full-page">
@@ -129,7 +93,7 @@ const Register = () => {
           handleChange={handleChange}
           labelText="Retype Password"
         />
-        <button type="submit" className="btn btn-block" disabled={isLoading}>
+        <button type="submit" className="btn btn-block" disabled>
           Submit
         </button>
         <p>

@@ -1,19 +1,17 @@
 import { useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import { useDispatch, useSelector } from "react-redux";
-import { activate, reset } from "../features/auth/authSlice";
-import { displayAlert, toggleAlert } from "../features/alerts/alertSlice";
 import Wrapper from "../assets/wrappers/RegisterPage";
 import { Logo, Alert } from "../components";
+import React from "react";
 
 const Activation = () => {
   const { uid, token } = useParams();
-  const dispatch = useDispatch();
+
   const navigate = useNavigate();
 
-  const { isLoading, isError, isSuccess, message } = useSelector(
-    (state) => state.auth
-  );
+  // const { isLoading, isError, isSuccess, message } = useSelector(
+  //   (state) => state.auth
+  // );
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -22,28 +20,28 @@ const Activation = () => {
       uid,
       token,
     };
-    dispatch(activate(userData));
+    // dispatch(activate(userData));
   };
 
-  useEffect(() => {
-    if (isError) {
-      dispatch(displayAlert({ alertType: "danger", alertText: message }));
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-    }
+  // useEffect(() => {
+  //   if (isError) {
+  //     dispatch(displayAlert({ alertType: "danger", alertText: message }));
+  //     setTimeout(() => dispatch(toggleAlert()), 3000);
+  //   }
 
-    if (isSuccess) {
-      navigate("/login");
-      dispatch(
-        displayAlert({
-          alertType: "success",
-          alertText: "Your account has been activated! You can login now",
-        })
-      );
-      setTimeout(() => dispatch(toggleAlert()), 3000);
-    }
+  //   if (isSuccess) {
+  //     navigate("/login");
+  //     dispatch(
+  //       displayAlert({
+  //         alertType: "success",
+  //         alertText: "Your account has been activated! You can login now",
+  //       })
+  //     );
+  //     setTimeout(() => dispatch(toggleAlert()), 3000);
+  //   }
 
-    dispatch(reset());
-  }, [isError, isSuccess, message, navigate, dispatch]);
+  //   dispatch(reset());
+  // }, [isError, isSuccess, message, navigate, dispatch]);
 
   return (
     <Wrapper className="full-page">
@@ -52,7 +50,7 @@ const Activation = () => {
         <h3>Activate Account</h3>
         <Alert />
 
-        <button type="submit" className="btn btn-block" disabled={isLoading}>
+        <button type="submit" className="btn btn-block" disabled>
           Activate Account
         </button>
       </form>
