@@ -9,9 +9,12 @@ import Logo from "./Logo";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
-const NavBar = () => {
+const NavBar = (props) => {
   const [showLogout, setShowLogout] = useState(false);
 
+  const { content } = props;
+  // const location = useLocation()
+  // const path = location.pathname
   const navigate = useNavigate();
   // const { toggleSidebar, logoutUser, user } = useAppContext()
 

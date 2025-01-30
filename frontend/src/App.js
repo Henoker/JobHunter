@@ -25,40 +25,41 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import React, { useEffect } from "react";
 
 function App() {
-  const location = useLocation();
-  const noNavbar =
-    location.pathname === "/register" ||
-    location.pathname === "/" ||
-    location.pathname.includes("password");
+  // const location = useLocation();
+  // const noNavbar =
+  //   location.pathname === "/register" ||
+  //   location.pathname === "/" ||
+  //   location.pathname.includes("password");
 
   return (
     <>
-      {noNavbar ? (
-        <Routes>
-          <Route path="/landing" element={<Landing />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/request/password_reset" element={<ResetPassword />} />
-          <Route
-            path="/password-reset/:token"
-            element={<ResetPasswordConfirm />}
-          />
-        </Routes>
-      ) : (
-        <SharedLayout
-          content={
-            <Routes>
-              <Route element={<ProtectedRoute />}>
-                {/* <Route path="/" element={<SharedLayout />}> */}
-                {/* <Route index element={<Stats />} /> */}
-                <Route path="all-jobs" element={<AllJobs />} />
-                <Route path="add-job" element={<AddJob />} />
-                <Route path="profile" element={<Profile />} />
-              </Route>
-            </Routes>
-          }
+      {/* {noNavbar ? ( */}
+      <Routes>
+        <Route path="/landing" element={<Landing />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
+        <Route path="/request/password_reset" element={<ResetPassword />} />
+        <Route
+          path="/password-reset/:token"
+          element={<ResetPasswordConfirm />}
         />
-      )}
+      </Routes>
+      {/* ) : ( */}
+      {/* <SharedLayout */}
+      {/* content={ */}
+      {/* //     <Routes>
+        //       <Route element={<ProtectedRoute />}>
+        //         {/* <Route path="/" element={<SharedLayout />}> */}
+      {/* //         {/* <Route index element={<Stats />} /> */}
+      {/* //         <Route path="all-jobs" element={<AllJobs />} />
+        //         <Route path="add-job" element={<AddJob />} />
+        //         <Route path="profile" element={<Profile />} />
+        //       </Route> */}
+      {/* //     </Routes> */}
+      {/* //   }
+        // />
+        <SharedLayout />
+      )} */}
     </>
   );
 }
