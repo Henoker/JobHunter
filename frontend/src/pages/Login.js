@@ -1,44 +1,18 @@
-import { React, useState, useEffect } from "react";
+import React, { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Logo, FormRow, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
+import { useAuth } from "../context/AuthContext";
 
 const Login = () => {
+  const { login } = useAuth();
   const [formData, setFormData] = useState({
     email: "",
     password: "",
   });
-
   const { email, password } = formData;
-
   const navigate = useNavigate();
-
-  // const { user, isLoading, isError, isSuccess, message } = useSelector(
-  //   (state) => state.auth
-  // );
-
-  // useEffect(() => {
-  //   console.log("Auth state:", { user, isError, isSuccess, message });
-
-  //   if (isError) {
-  //     dispatch(displayAlert({ alertType: "danger", alertText: message }));
-  //     setTimeout(() => dispatch(toggleAlert()), 3000);
-  //   }
-
-  //   if (isSuccess && user && user.access) {
-  //     dispatch(
-  //       displayAlert({
-  //         alertType: "success",
-  //         alertText: "You are successfully logged in as a user.",
-  //       })
-  //     );
-  //     setTimeout(() => dispatch(toggleAlert()), 3000);
-
-  //     navigate("/"); // Redirect to the protected dashboard
-  //   }
-
-  //   dispatch(reset());
-  // }, [isError, isSuccess, user, message, navigate, dispatch]);
+  const [error, setError] = useState("");
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -47,8 +21,17 @@ const Login = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    try {
+      // Call the login function with the form data
+      await login({ email, password });
+      // If login is successful, navigate to the home page or wherever appropriate
+      navigate("/");
+    } catch (err) {
+      // Handle any errors returned by the login function
+      setError(err.message || "An error occurred during login.");
+    }
   };
 
   return (
@@ -56,7 +39,7 @@ const Login = () => {
       <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>Login</h3>
-        <Alert />
+        {error && <Alert>{error}</Alert>}
         <FormRow
           type="email"
           name="email"

@@ -35,9 +35,9 @@ const App = () => {
         <Routes>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/landing" element={<Navigate to="/" />} />
+          <Route path="/landing" element={<Landing />} />
           <Route
-            path="/dashboard"
+            path="/"
             element={
               <ProtectedRoute>
                 <SharedLayout isOpen={isOpen} toggleSidebar={toggleSidebar}>

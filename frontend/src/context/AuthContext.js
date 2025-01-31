@@ -20,7 +20,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     try {
       const res = await axios.post(
-        "http://localhost:8000/api/auth/login/",
+        "http://localhost:8000/api/v1/accountslogin/",
         credentials
       );
       localStorage.setItem("token", res.data.token);
@@ -33,7 +33,7 @@ export const AuthProvider = ({ children }) => {
   const logout = () => {
     axios
       .post(
-        "http://localhost:8000/api/auth/logout/",
+        "http://localhost:8000/api/v1/logout/",
         {},
         {
           headers: { Authorization: `Token ${token}` },
