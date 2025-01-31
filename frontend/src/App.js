@@ -8,60 +8,78 @@ import {
   ResetPassword,
   ResetPasswordConfirm,
 } from "./pages";
-
+import { AuthProvider } from "./context/AuthContext";
 import AddJob from "./pages/dashboard/AddJob";
 import AllJobs from "./pages/dashboard/AllJobs";
 import Profile from "./pages/dashboard/Profile";
-import SharedLayout from "./pages/dashboard/SharedLayout";
+import SmallSidebar from "./components/SmallSidebar";
+import { NavBar } from "./components";
 import Stats from "./pages/dashboard/Stats";
+import SharedLayout from "./pages/dashboard/SharedLayout";
 import {
-  BrowserRouter,
+  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
-  useLocation,
 } from "react-router-dom";
 import ProtectedRoute from "./components/ProtectedRoute";
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 
-function App() {
-  // const location = useLocation();
-  // const noNavbar =
-  //   location.pathname === "/register" ||
-  //   location.pathname === "/" ||
-  //   location.pathname.includes("password");
+const App = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  const toggleSidebar = () => setIsOpen(!isOpen);
 
   return (
-    <>
-      {/* {noNavbar ? ( */}
-      <Routes>
-        <Route path="/landing" element={<Landing />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/request/password_reset" element={<ResetPassword />} />
-        <Route
-          path="/password-reset/:token"
-          element={<ResetPasswordConfirm />}
-        />
-      </Routes>
-      {/* ) : ( */}
-      {/* <SharedLayout */}
-      {/* content={ */}
-      {/* //     <Routes>
-        //       <Route element={<ProtectedRoute />}>
-        //         {/* <Route path="/" element={<SharedLayout />}> */}
-      {/* //         {/* <Route index element={<Stats />} /> */}
-      {/* //         <Route path="all-jobs" element={<AllJobs />} />
-        //         <Route path="add-job" element={<AddJob />} />
-        //         <Route path="profile" element={<Profile />} />
-        //       </Route> */}
-      {/* //     </Routes> */}
-      {/* //   }
-        // />
-        <SharedLayout />
-      )} */}
-    </>
+    <AuthProvider>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/landing" element={<Navigate to="/" />} />
+          <Route
+            path="/dashboard"
+            element={
+              <ProtectedRoute>
+                <SharedLayout isOpen={isOpen} toggleSidebar={toggleSidebar}>
+                  <Dashboard />
+                </SharedLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/profile"
+            element={
+              <ProtectedRoute>
+                <SharedLayout isOpen={isOpen} toggleSidebar={toggleSidebar}>
+                  <Profile />
+                </SharedLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/all-jobs"
+            element={
+              <ProtectedRoute>
+                <SharedLayout isOpen={isOpen} toggleSidebar={toggleSidebar}>
+                  <AllJobs />
+                </SharedLayout>
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/add-job"
+            element={
+              <ProtectedRoute>
+                <SharedLayout isOpen={isOpen} toggleSidebar={toggleSidebar}>
+                  <AddJob />
+                </SharedLayout>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
+      </Router>
+    </AuthProvider>
   );
-}
+};
 
 export default App;

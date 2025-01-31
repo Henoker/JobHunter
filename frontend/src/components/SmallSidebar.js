@@ -5,22 +5,18 @@ import Logo from "./Logo";
 import NavLinks from "./NavLinks";
 import React from "react";
 
-export const SmallSidebar = () => {
-  const handleToggleSidebar = () => {
-    console.log("Toggling sidebar");
-  };
-
+export const SmallSidebar = ({ isOpen, toggleSidebar }) => {
   return (
     <Wrapper>
-      <div className="sidebar-container show-sidebar">
+      <div className={`sidebar-container ${isOpen ? "show-sidebar" : ""}`}>
         <div className="content">
-          <button className="close-btn" onClick={handleToggleSidebar}>
+          <button className="close-btn" onClick={{ toggleSidebar }}>
             <FaTimes />
           </button>
           <header>
             <Logo />
           </header>
-          <NavLinks toggleSidebar={handleToggleSidebar} />
+          <NavLinks toggleSidebar={toggleSidebar} />
         </div>
       </div>
     </Wrapper>

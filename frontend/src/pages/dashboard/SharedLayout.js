@@ -1,19 +1,16 @@
 import React from "react";
-import { Outlet, Link } from "react-router-dom";
 import Wrapper from "../../assets/wrappers/SharedLayout";
 import { NavBar, SmallSidebar, BigSidebar } from "../../components";
 
-const SharedLayout = () => {
+const SharedLayout = ({ children, isOpen, toggleSidebar }) => {
   return (
     <Wrapper>
       <main className="dashboard">
-        <SmallSidebar />
+        <SmallSidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
         <BigSidebar />
         <div>
-          <NavBar />
-          <div className="dashboard-page">
-            <Outlet />
-          </div>
+          <NavBar toggleSidebar={toggleSidebar} />
+          <div className="dashboard-page">{children}</div>
         </div>
       </main>
     </Wrapper>
