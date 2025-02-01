@@ -7,7 +7,7 @@ const SharedLayout = ({ children, isOpen, toggleSidebar }) => {
     <Wrapper>
       <main className="dashboard">
         <SmallSidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
-        <BigSidebar />
+        <BigSidebar isOpen={isOpen} toggleSidebar={toggleSidebar} />
         <div>
           <NavBar toggleSidebar={toggleSidebar} />
           <div className="dashboard-page">{children}</div>

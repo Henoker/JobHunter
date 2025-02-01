@@ -22,9 +22,6 @@ const Dashboard = () => {
     <Wrapper>
       <main className="dashboard">
         <h1>Welcome, </h1>
-        <div>
-          <NavBar />
-        </div>
       </main>
     </Wrapper>
   );
