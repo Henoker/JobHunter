@@ -11,9 +11,15 @@ export const AuthProvider = ({ children }) => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Token ${token}`;
       axios
-        .get("http://localhost:8000/api/v1/users/")
+        .get("http://localhost:8000/api/v1/accountsusers/")
         .then((res) => setUser(res.data))
-        .catch(() => logout());
+        .catch((err) => {
+          console.error(
+            "Error fetching user:",
+            err.response?.data || err.message
+          );
+          logout(); // Log out if token is invalid
+        });
     }
   }, [token]);
 
@@ -23,27 +29,37 @@ export const AuthProvider = ({ children }) => {
         "http://localhost:8000/api/v1/accountslogin/",
         credentials
       );
+
       localStorage.setItem("token", res.data.token);
       setToken(res.data.token);
+      setUser(res.data.user);
+
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Token ${res.data.token}`;
     } catch (err) {
-      console.error("Login failed", err);
+      console.error("Login failed", err.response?.data || err.message);
+      throw new Error(err.response?.data?.detail || "Login failed.");
     }
   };
 
-  const logout = () => {
-    axios
-      .post(
+  const logout = async () => {
+    try {
+      await axios.post(
         "http://localhost:8000/api/v1/logout/",
         {},
         {
           headers: { Authorization: `Token ${token}` },
         }
-      )
-      .finally(() => {
-        localStorage.removeItem("token");
-        setToken("");
-        setUser(null);
-      });
+      );
+    } catch (err) {
+      console.error("Logout failed", err.response?.data || err.message);
+    } finally {
+      localStorage.removeItem("token");
+      setToken("");
+      setUser(null);
+      delete axios.defaults.headers.common["Authorization"];
+    }
   };
 
   return (
