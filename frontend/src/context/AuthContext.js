@@ -43,6 +43,27 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const register = async (formData) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/accountsregister/",
+        formData
+      );
+
+      console.log("Registration successful:", res.data);
+      return {
+        success: true,
+        message: "Registration successful! Check your email for activation.",
+      };
+    } catch (err) {
+      console.error("Registration failed", err.response?.data || err.message);
+      return {
+        success: false,
+        message: err.response?.data?.detail || "Registration failed.",
+      };
+    }
+  };
+
   const logout = async () => {
     try {
       await axios.post(
@@ -63,7 +84,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout }}>
+    <AuthContext.Provider value={{ user, login, logout, register }}>
       {children}
     </AuthContext.Provider>
   );

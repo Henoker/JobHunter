@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../context/AuthContext"; // Import AuthContext
 import { Logo, FormRow, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
 
@@ -11,13 +12,10 @@ const Register = () => {
     password: "",
     re_password: "",
   });
-  const { first_name, last_name, email, password, re_password } = formData;
-
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const { register } = useAuth(); // Use the register function from context
   const navigate = useNavigate();
-
-  // const { user, isLoading, isError, isSuccess, message } = useSelector(
-  //   (state) => state.auth
-  // );
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -26,74 +24,68 @@ const Register = () => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (formData.password !== formData.re_password) {
+      setError("Passwords do not match.");
+      return;
+    }
+
+    const response = await register(formData);
+    if (response.success) {
+      setSuccess(response.message);
+      setTimeout(() => navigate("/login"), 3000); // Redirect after 3 seconds
+    } else {
+      setError(response.message);
+    }
   };
-
-  // useEffect(() => {
-  //   if (isError) {
-  //     dispatch(displayAlert({ alertType: "danger", alertText: message }));
-  //     setTimeout(() => dispatch(toggleAlert()), 3000);
-  //   }
-
-  //   if (isSuccess) {
-  //     dispatch(
-  //       displayAlert({
-  //         alertType: "success",
-  //         alertText:
-  //           "Registration successful! Check your email for activation instructions.",
-  //       })
-  //     );
-  //     setTimeout(() => dispatch(toggleAlert()), 3000);
-
-  //     navigate("/");
-  //   }
-
-  //   dispatch(reset());
-  // }, [isError, isSuccess, user, message, navigate, dispatch]);
 
   return (
     <Wrapper className="full-page">
       <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>Register</h3>
-        <Alert />
+        {error && <Alert type="danger" text={error} />}
+        {success && <Alert type="success" text={success} />}
         <FormRow
           type="text"
           name="first_name"
-          value={first_name}
+          value={formData.first_name}
           handleChange={handleChange}
           labelText="First Name"
         />
         <FormRow
           type="text"
           name="last_name"
-          value={last_name}
+          value={formData.last_name}
           handleChange={handleChange}
           labelText="Last Name"
         />
         <FormRow
           type="email"
           name="email"
-          value={email}
+          value={formData.email}
           handleChange={handleChange}
           labelText="Email"
         />
         <FormRow
           type="password"
           name="password"
-          value={password}
+          value={formData.password}
           handleChange={handleChange}
           labelText="Password"
         />
         <FormRow
           type="password"
           name="re_password"
-          value={re_password}
+          value={formData.re_password}
           handleChange={handleChange}
           labelText="Retype Password"
         />
-        <button type="submit" className="btn btn-block" disabled>
+        <button type="submit" className="btn btn-block">
           Submit
         </button>
         <p>
