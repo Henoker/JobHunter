@@ -8,7 +8,6 @@ import { useAuth } from "../context/AuthContext";
 const ResetPasswordConfirm = () => {
   const [formData, setFormData] = useState({
     new_password: "",
-    re_new_password: "",
   });
 
   const [alert, setAlert] = useState({ type: "", message: "" });
@@ -25,7 +24,7 @@ const ResetPasswordConfirm = () => {
     e.preventDefault();
     setAlert({ type: "", message: "" });
 
-    const response = await passwordResetConfirm(token, formData.password);
+    const response = await passwordResetConfirm(token, formData.new_password);
     setAlert({
       type: response.success ? "success" : "danger",
       message: response.message,
@@ -45,7 +44,7 @@ const ResetPasswordConfirm = () => {
         <FormRow
           type="password"
           name="new_password"
-          value={formData.password}
+          value={formData.new_password}
           handleChange={handleChange}
           labelText="New Password"
         />
