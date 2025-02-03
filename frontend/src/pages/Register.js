@@ -12,8 +12,7 @@ const Register = () => {
     password: "",
     re_password: "",
   });
-  const [error, setError] = useState("");
-  const [success, setSuccess] = useState("");
+  const [alert, setAlert] = useState({ type: "", message: "" });
   const { register } = useAuth(); // Use the register function from context
   const navigate = useNavigate();
 
@@ -26,20 +25,19 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setError("");
-    setSuccess("");
+    setAlert({ type: "", message: "" })
 
     if (formData.password !== formData.re_password) {
-      setError("Passwords do not match.");
+      setAlert({ type: "danger", message: "Passwords do not match." });
       return;
     }
 
     const response = await register(formData);
     if (response.success) {
-      setSuccess(response.message);
+      setAlert({ type: "success", message: response.message });
       setTimeout(() => navigate("/login"), 3000); // Redirect after 3 seconds
     } else {
-      setError(response.message);
+      setAlert({ type: "danger", message: response.message });
     }
   };
 
@@ -48,8 +46,7 @@ const Register = () => {
       <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>Register</h3>
-        {error && <Alert type="danger" text={error} />}
-        {success && <Alert type="success" text={success} />}
+        <Alert type={alert.type} text={alert.message} />
         <FormRow
           type="text"
           name="first_name"
