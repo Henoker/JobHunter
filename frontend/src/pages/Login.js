@@ -12,7 +12,7 @@ const Login = () => {
   });
   const { email, password } = formData;
   const navigate = useNavigate();
-  const [error, setError] = useState("");
+  const [alert, setAlert] = useState({ type: "", message: "" });
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -23,14 +23,17 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setAlert({ type: "", message: "" });
     try {
       // Call the login function with the form data
       await login({ email, password });
       // If login is successful, navigate to the home page or wherever appropriate
+      setAlert({ type: "success", message: "successfully logged in" });
       navigate("/");
     } catch (err) {
       // Handle any errors returned by the login function
-      setError(err.message || "An error occurred during login.");
+      setAlert({ type: "danger", message: "An error occurred during login." });
+      // setError(err.message || "An error occurred during login.");
     }
   };
 
@@ -39,7 +42,7 @@ const Login = () => {
       <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>Login</h3>
-        {error && <Alert>{error}</Alert>}
+        <Alert type={alert.type} text={alert.message} />
         <FormRow
           type="email"
           name="email"

@@ -1,32 +1,27 @@
-import { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { Logo, FormRow, Alert } from "../components";
 import Wrapper from "../assets/wrappers/RegisterPage";
+import { useAuth } from "../context/AuthContext";
 
 const ResetPassword = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-  });
+  const [email, setEmail] = useState("");
+  const [alert, setAlert] = useState({ type: "", message: "" });
 
-  const { email } = formData;
-
-  const navigate = useNavigate();
+  const { passwordReset } = useAuth();
 
   // const { user, isLoading, isError, isSuccess, message } = useSelector(
   //   (state) => state.auth
   // );
 
-  const handleChange = (e) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
-
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setAlert({ type: "", message: "" });
 
-    console.log("working");
+    const response = await passwordReset(email);
+    setAlert({
+      type: response.success ? "success" : "danger",
+      message: response.message,
+    });
   };
 
   return (
@@ -34,12 +29,12 @@ const ResetPassword = () => {
       <form className="form" onSubmit={handleSubmit}>
         <Logo />
         <h3>Reset Password</h3>
-        <Alert />
+        <Alert type={alert.type} text={alert.message} />
         <FormRow
           type="email"
           name="email"
           value={email}
-          handleChange={handleChange}
+          handleChange={(e) => setEmail(e.target.value)}
           labelText="Email"
         />
 

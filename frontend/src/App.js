@@ -31,7 +31,7 @@ const App = () => {
           <Route path="/landing" element={<Landing />} />
           <Route path="/reset-password" element={<ResetPassword />} />
           <Route
-            path="/reset-password-confirm"
+            path="/password-reset/:token"
             element={<ResetPasswordConfirm />}
           />
           <Route path="/activation" element={<Activation />} />

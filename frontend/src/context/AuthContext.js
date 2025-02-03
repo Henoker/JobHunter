@@ -64,6 +64,35 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // 🔹 Password Reset Request
+  const passwordReset = async (email) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/password_reset/",
+        { email }
+      );
+      return { success: true, message: "Check your email for reset link." };
+    } catch (error) {
+      return { success: false, message: "Password reset request failed." };
+    }
+  };
+
+  // 🔹 Confirm Password Reset (using token)
+  const passwordResetConfirm = async (token, password) => {
+    try {
+      const res = await axios.post(
+        "http://localhost:8000/api/v1/password_reset/confirm/",
+        { token, password } // Send only one password field
+      );
+      return {
+        success: true,
+        message: "Password reset successful. You can now log in.",
+      };
+    } catch (error) {
+      return { success: false, message: "Password reset confirmation failed." };
+    }
+  };
+
   const logout = async () => {
     try {
       await axios.post(
@@ -84,7 +113,16 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, login, logout, register }}>
+    <AuthContext.Provider
+      value={{
+        user,
+        login,
+        logout,
+        register,
+        passwordReset,
+        passwordResetConfirm,
+      }}
+    >
       {children}
     </AuthContext.Provider>
   );
