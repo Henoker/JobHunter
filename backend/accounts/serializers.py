@@ -6,12 +6,17 @@ User = get_user_model()
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
-    username = serializers.CharField()
+    
 
     def to_representation(self, instance):
-        ret = super().to_representation(instance)
-        ret.pop('password', None)
-        return ret
+        """Modify representation to include additional user fields."""
+        user_data = {
+            "id": instance.id,
+            "email": instance.email,
+            "first_name": instance.first_name,
+            "last_name": instance.last_name,
+        }
+        return user_data
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -23,3 +28,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         user = User.objects.create_user(**validated_data)
         return user
+
+
+class UserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ["id", "email", "first_name", "last_name"] 

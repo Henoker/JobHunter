@@ -12,7 +12,7 @@ import { useNavigate } from "react-router-dom";
 const NavBar = ({ toggleSidebar }) => {
   const { user, logout } = useAuth();
   const [showLogout, setShowLogout] = useState(false);
-
+  console.log(user);
   return (
     <Wrapper>
       <div className="nav-center">
@@ -46,7 +46,8 @@ const NavBar = ({ toggleSidebar }) => {
             onClick={() => setShowLogout(!showLogout)}
           >
             <FaUserCircle />
-            {user?.name}
+            {user ? user.first_name : "Guest"}
+
             <FaCaretDown />
           </button>
           <div className={showLogout ? "dropdown show-dropdown" : "dropdown"}>

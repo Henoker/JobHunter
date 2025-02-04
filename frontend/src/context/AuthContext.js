@@ -12,7 +12,10 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common["Authorization"] = `Token ${token}`;
       axios
         .get("http://localhost:8000/api/v1/accountsusers/")
-        .then((res) => setUser(res.data))
+        .then((res) => {
+          console.log("User Data:", res.data);
+          setUser(res.data);
+        })
         .catch((err) => {
           console.error(
             "Error fetching user:",
