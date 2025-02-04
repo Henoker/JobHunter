@@ -6,6 +6,7 @@ User = get_user_model()
 class LoginSerializer(serializers.Serializer):
     email = serializers.EmailField()
     password = serializers.CharField()
+    username = serializers.CharField()
 
     def to_representation(self, instance):
         ret = super().to_representation(instance)
@@ -16,7 +17,7 @@ class LoginSerializer(serializers.Serializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta: 
         model = User
-        fields = ('id','email','password')
+        fields = ('id','email','password', 'username')
         extra_kwargs = { 'password': {'write_only':True}}
     
     def create(self, validated_data):
