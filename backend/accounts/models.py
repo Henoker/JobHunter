@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
+from django.utils.translation import gettext_lazy as _
 
 from django_rest_passwordreset.signals import reset_password_token_created
 from django.dispatch import receiver 
@@ -29,6 +30,8 @@ class CustomUser(AbstractUser):
     email = models.EmailField(max_length=200, unique=True)
     birthday = models.DateField(null=True, blank=True)
     username = models.CharField(max_length=200, null=True, blank=True)
+    first_name = models.CharField(verbose_name=_("First Name"), max_length=50)
+    last_name = models.CharField(verbose_name=_("Last Name"), max_length=50)
 
     objects = CustomUserManager()
 
