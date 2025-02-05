@@ -13,6 +13,7 @@ const Register = () => {
     re_password: "",
   });
   const [alert, setAlert] = useState({ type: "", message: "" });
+  const [loading, setLoading] = useState(false); // Loading state
   const { register } = useAuth(); // Use the register function from context
   const navigate = useNavigate();
 
@@ -25,14 +26,17 @@ const Register = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setAlert({ type: "", message: "" })
+    setAlert({ type: "", message: "" });
 
     if (formData.password !== formData.re_password) {
       setAlert({ type: "danger", message: "Passwords do not match." });
       return;
     }
 
+    setLoading(true); // Start loading
     const response = await register(formData);
+    setLoading(false); // Stop loading after response
+
     if (response.success) {
       setAlert({ type: "success", message: response.message });
       setTimeout(() => navigate("/login"), 3000); // Redirect after 3 seconds
@@ -82,8 +86,8 @@ const Register = () => {
           handleChange={handleChange}
           labelText="Retype Password"
         />
-        <button type="submit" className="btn btn-block">
-          Submit
+        <button type="submit" className="btn btn-block" disabled={loading}>
+          {loading ? "Submitting..." : "Submit"}
         </button>
         <p>
           Already a member?{" "}
