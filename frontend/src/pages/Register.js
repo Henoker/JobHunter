@@ -87,7 +87,7 @@ const Register = () => {
           labelText="Retype Password"
         />
         <button type="submit" className="btn btn-block" disabled={loading}>
-          {loading ? "Submitting..." : "Submit"}
+          {loading ? "Submitting" : "Submit"}
         </button>
         <p>
           Already a member?{" "}
