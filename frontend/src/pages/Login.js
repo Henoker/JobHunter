@@ -13,6 +13,7 @@ const Login = () => {
   const { email, password } = formData;
   const navigate = useNavigate();
   const [alert, setAlert] = useState({ type: "", message: "" });
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     setFormData((prev) => ({
@@ -57,8 +58,8 @@ const Login = () => {
           handleChange={handleChange}
           labelText="Password"
         />
-        <button type="submit" className="btn btn-block">
-          Submit
+        <button type="submit" className="btn btn-block" disabled={loading}>
+          {loading ? "Submitting" : "Submit"}
         </button>
         <p>
           Not a member yet?{" "}
