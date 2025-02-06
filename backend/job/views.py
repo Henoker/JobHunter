@@ -1,21 +1,29 @@
-from django.shortcuts import render
-from rest_framework import generics
+from rest_framework import generics, permissions
+from rest_framework.response import Response
+from knox.auth import TokenAuthentication
 from .models import Job
 from .serializers import JobSerializer
-from .permissions import IsUserOrReadOnly
-from rest_framework.permissions import IsAuthenticated
 
-# Create your views here.
-class ListJob(generics.ListCreateAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Job.objects.all()
+class ListCreateJobView(generics.ListCreateAPIView):
     serializer_class = JobSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        """Return only jobs created by the logged-in user"""
+        return Job.objects.filter(created_by=self.request.user)
+
     def perform_create(self, serializer):
-        # Automatically set created_by to the logged-in user
+        """Assign the job to the authenticated user"""
         serializer.save(created_by=self.request.user)
 
 
-class DetailJob(generics.RetrieveUpdateDestroyAPIView):
-    permission_classes = [IsAuthenticated]
-    queryset = Job.objects.all()
+class RetrieveUpdateDeleteJobView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = JobSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    authentication_classes = [TokenAuthentication]
+
+    def get_queryset(self):
+        """Ensure users can only update/delete their own jobs"""
+        return Job.objects.filter(created_by=self.request.user)
+

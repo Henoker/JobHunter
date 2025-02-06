@@ -6,6 +6,7 @@ const AuthContext = createContext();
 export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
+  const [jobs, setJobs] = useState([]);
 
   useEffect(() => {
     if (token) {
@@ -22,6 +23,17 @@ export const AuthProvider = ({ children }) => {
             err.response?.data || err.message
           );
           logout(); // Log out if token is invalid
+        });
+      axios
+        .get("http://localhost:8000/api/v1/jobs/")
+        .then((res) => {
+          setJobs(res.data); // Store the jobs for the user
+        })
+        .catch((err) => {
+          console.error(
+            "Failed to fetch jobs:",
+            err.response?.data || err.message
+          );
         });
     }
   }, [token]);
@@ -40,6 +52,11 @@ export const AuthProvider = ({ children }) => {
       axios.defaults.headers.common[
         "Authorization"
       ] = `Token ${res.data.token}`;
+
+      axios
+        .get("http://localhost:8000/api/v1/jobs/")
+        .then((res) => setJobs(res.data))
+        .catch((err) => console.error("Error fetching jobs:", err));
     } catch (err) {
       console.error("Login failed", err.response?.data || err.message);
       throw new Error(err.response?.data?.detail || "Login failed.");
@@ -120,6 +137,7 @@ export const AuthProvider = ({ children }) => {
       value={{
         user,
         login,
+        jobs,
         logout,
         register,
         passwordReset,

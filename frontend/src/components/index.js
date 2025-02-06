@@ -6,7 +6,7 @@ import SmallSidebar from "./SmallSidebar";
 import NavBar from "./NavBar";
 import NavLinks from "./NavLinks";
 import Loading from "./Loading";
-
+import JobsContainer from "./JobsContainer";
 export {
   Logo,
   FormRow,
@@ -16,4 +16,5 @@ export {
   NavBar,
   NavLinks,
   Loading,
+  JobsContainer,
 };

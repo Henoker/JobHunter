@@ -1,5 +1,6 @@
 from django.db import models
 from accounts.models import CustomUser
+from django.conf import settings
 
 # Create your models here.
 class Job(models.Model):
@@ -52,10 +53,9 @@ class Job(models.Model):
         help_text="Job location"
     )
     created_by = models.ForeignKey(
-        CustomUser, 
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name='jobs',
-        help_text="Please provide user"
+        related_name='jobs'
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
