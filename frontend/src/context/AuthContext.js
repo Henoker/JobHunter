@@ -28,6 +28,7 @@ export const AuthProvider = ({ children }) => {
         .get("http://localhost:8000/api/v1/jobs/")
         .then((res) => {
           setJobs(res.data); // Store the jobs for the user
+          console.log("All Jobs:", res.data);
         })
         .catch((err) => {
           console.error(
@@ -56,6 +57,7 @@ export const AuthProvider = ({ children }) => {
       axios
         .get("http://localhost:8000/api/v1/jobs/")
         .then((res) => setJobs(res.data))
+
         .catch((err) => console.error("Error fetching jobs:", err));
     } catch (err) {
       console.error("Login failed", err.response?.data || err.message);

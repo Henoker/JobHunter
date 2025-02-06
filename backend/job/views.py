@@ -11,12 +11,12 @@ class ListCreateJobView(generics.ListCreateAPIView):
 
     def get_queryset(self):
         """Return only jobs created by the logged-in user"""
+        # Ensure the queryset is filtering properly by the logged-in user
         return Job.objects.filter(created_by=self.request.user)
 
     def perform_create(self, serializer):
         """Assign the job to the authenticated user"""
         serializer.save(created_by=self.request.user)
-
 
 class RetrieveUpdateDeleteJobView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = JobSerializer
@@ -26,4 +26,5 @@ class RetrieveUpdateDeleteJobView(generics.RetrieveUpdateDestroyAPIView):
     def get_queryset(self):
         """Ensure users can only update/delete their own jobs"""
         return Job.objects.filter(created_by=self.request.user)
+
 

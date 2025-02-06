@@ -7,6 +7,7 @@ import axios from "axios";
 
 const JobsContainer = () => {
   const { jobs } = useAuth();
+  console.log("All Jobs:", jobs);
 
   return (
     <Wrapper>
@@ -19,16 +20,18 @@ const JobsContainer = () => {
       {/* </div> */}
       <div>
         <h2>Job Listings</h2>
-        {jobs.length === 0 ? (
-          <p>No jobs available</p>
+        {jobs && jobs.length > 0 ? (
+          jobs.map((job) => (
+            <div key={job.id}>
+              <h3>
+                {job.position} at {job.company}
+              </h3>
+              <p>{job.status}</p>
+              <p>{job.job_location}</p>
+            </div>
+          ))
         ) : (
-          <ul>
-            {jobs.map((job) => (
-              <li key={job.id}>
-                {job.position} at {job.company} ({job.status})
-              </li>
-            ))}
-          </ul>
+          <p>No jobs available</p>
         )}
       </div>
     </Wrapper>
