@@ -134,21 +134,34 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  const updateUser = async (updatedUser) => {
+  const updateUser = async (updatedData) => {
     try {
-      const res = await axios.patch(
-        "http://localhost:8000/api/v1/accountsusers/update/", // Adjust endpoint if needed
-        updatedUser,
+      const response = await axios.patch(
+        "http://localhost:8000/api/v1/accounts/users/update_profile/",
+        updatedData,
         {
-          headers: { Authorization: `Token ${token}` },
+          headers: {
+            Authorization: `Token ${token}`,
+            "Content-Type": "application/json",
+          },
         }
       );
 
-      setUser(res.data); // Update the user state
-      return { success: true, message: "Profile updated successfully!" };
+      console.log("Updated user response:", response.data); // Debugging log
+
+      if (response.status === 200) {
+        setUser((prevUser) => ({
+          ...prevUser,
+          ...response.data, // Merge updated user fields
+        }));
+      } else {
+        throw new Error("Failed to update profile.");
+      }
     } catch (error) {
-      console.error("Update failed", error.response?.data || error.message);
-      return { success: false, message: "Failed to update profile." };
+      console.error(
+        "Error updating profile:",
+        error.response?.data || error.message
+      );
     }
   };
 

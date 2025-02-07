@@ -32,6 +32,7 @@ class CustomUser(AbstractUser):
     username = models.CharField(max_length=200, null=True, blank=True)
     first_name = models.CharField(verbose_name=_("First Name"), max_length=50)
     last_name = models.CharField(verbose_name=_("Last Name"), max_length=50)
+    user_location = models.CharField(verbose_name=_("Location"), max_length=50, null=True, blank=True)
 
     objects = CustomUserManager()
 

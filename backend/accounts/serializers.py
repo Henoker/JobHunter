@@ -15,6 +15,7 @@ class LoginSerializer(serializers.Serializer):
             "email": instance.email,
             "first_name": instance.first_name,
             "last_name": instance.last_name,
+            "user_location": instance.user_location,
         }
         return user_data
 
@@ -22,7 +23,7 @@ class LoginSerializer(serializers.Serializer):
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta: 
         model = User
-        fields = ('id','email','password','first_name', 'last_name')
+        fields = ('id','email','password','first_name', 'last_name', 'user_location')
         extra_kwargs = { 'password': {'write_only':True}}
     
     def create(self, validated_data):
@@ -33,4 +34,16 @@ class RegisterSerializer(serializers.ModelSerializer):
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ["id", "email", "first_name", "last_name"] 
+        fields = ["id", "email", "first_name", "last_name", "user_location"] 
+
+class UpdateProfileSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ["username", "email", "first_name", "last_name", "user_location"]
+        extra_kwargs = {
+            "email": {"required": False},
+            "username": {"required": False},
+            "first_name": {"required": False},
+            "last_name": {"required": False},
+            "user_location": {"required": False},
+        }

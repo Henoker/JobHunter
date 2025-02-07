@@ -1,17 +1,25 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { FormRow, Alert } from "../../components";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 import { useAuth } from "../../context/AuthContext";
 
 const Profile = () => {
-  const { user, updateUser } = useAuth(); // Ensure updateUser is available
+  const { user, updateUser } = useAuth();
   const [loading, setLoading] = useState(false);
   const [alert, setAlert] = useState({ type: "", message: "" });
 
+  // Ensure user data is populated when component loads
   const [first_name, setName] = useState(user?.first_name || "");
   const [email, setEmail] = useState(user?.email || "");
   const [last_name, setLastName] = useState(user?.last_name || "");
   const [user_location, setLocation] = useState(user?.user_location || "");
+
+  useEffect(() => {
+    setName(user?.first_name || "");
+    setEmail(user?.email || "");
+    setLastName(user?.last_name || "");
+    setLocation(user?.user_location || ""); // Ensure location is set
+  }, [user]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -24,8 +32,19 @@ const Profile = () => {
 
     try {
       setLoading(true);
-      await updateUser({ first_name, email, last_name, user_location }); // Call update function
+      const updatedUser = await updateUser({
+        first_name,
+        email,
+        last_name,
+        user_location,
+      });
       setAlert({ type: "success", message: "Profile updated successfully!" });
+
+      // Ensure frontend state is updated with latest user data
+      setName(updatedUser.first_name);
+      setEmail(updatedUser.email);
+      setLastName(updatedUser.last_name);
+      setLocation(updatedUser.user_location);
     } catch (error) {
       setAlert({ type: "danger", message: "Failed to update profile." });
     } finally {
@@ -60,7 +79,8 @@ const Profile = () => {
           />
           <FormRow
             type="text"
-            name="location"
+            labelText="Location"
+            name="user_location"
             value={user_location}
             handleChange={(e) => setLocation(e.target.value)}
           />

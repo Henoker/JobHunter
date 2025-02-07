@@ -18,7 +18,6 @@ const JobsContainer = () => {
         })} */}
       {/* <Job /> */}
       {/* </div> */}
-      <h5> jobs found</h5>
       {/* <div className="jobs">
         {jobs && jobs.length > 0 ? (
           jobs.map((job) => (
