@@ -7,6 +7,7 @@ import NavBar from "./NavBar";
 import NavLinks from "./NavLinks";
 import Loading from "./Loading";
 import JobsContainer from "./JobsContainer";
+import FormRowSelect from "./FormRowSelect";
 export {
   Logo,
   FormRow,
@@ -17,4 +18,5 @@ export {
   NavLinks,
   Loading,
   JobsContainer,
+  FormRowSelect,
 };
