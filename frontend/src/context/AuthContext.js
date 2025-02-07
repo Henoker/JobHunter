@@ -134,6 +134,24 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  const updateUser = async (updatedUser) => {
+    try {
+      const res = await axios.patch(
+        "http://localhost:8000/api/v1/accountsusers/update/", // Adjust endpoint if needed
+        updatedUser,
+        {
+          headers: { Authorization: `Token ${token}` },
+        }
+      );
+
+      setUser(res.data); // Update the user state
+      return { success: true, message: "Profile updated successfully!" };
+    } catch (error) {
+      console.error("Update failed", error.response?.data || error.message);
+      return { success: false, message: "Failed to update profile." };
+    }
+  };
+
   return (
     <AuthContext.Provider
       value={{
@@ -144,6 +162,7 @@ export const AuthProvider = ({ children }) => {
         register,
         passwordReset,
         passwordResetConfirm,
+        updateUser,
       }}
     >
       {children}
