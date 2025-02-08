@@ -47,6 +47,7 @@ const App = () => {
             <Route path="all-jobs" element={<AllJobs />} />
             <Route path="add-job" element={<AddJob />} />
             <Route path="profile" element={<Profile />} />
+            <Route path="edit-job/:id" element={<AddJob />} />
           </Route>
           <Route path="*" element={<Error />} />
         </Routes>

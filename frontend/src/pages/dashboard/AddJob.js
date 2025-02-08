@@ -3,12 +3,14 @@ import { FormRow, FormRowSelect, Alert } from "../../components";
 import { useAuth } from "../../context/AuthContext";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 import axios from "axios";
+import { useParams } from "react-router-dom";
 
 const jobTypeOptions = ["full-time", "part-time", "remote", "internship"];
 const statusOptions = ["pending", "interview", "declined"];
 
 const AddJob = ({ selectedJob, clearEdit }) => {
-  const { user, token } = useAuth(); // Get user & token from context
+  const { user, token, jobs, setJobs } = useAuth(); // ✅ Get `setJobs` from context
+  const { id } = useParams();
 
   // ✅ State for job fields
   const [position, setPosition] = useState("");
@@ -55,37 +57,33 @@ const AddJob = ({ selectedJob, clearEdit }) => {
     setLoading(true);
     try {
       const config = { headers: { Authorization: `Token ${token}` } };
+      let updatedJobs;
 
       if (isEditing) {
         // Update existing job
-        await axios.put(
+        const { data } = await axios.put(
           `http://localhost:8000/api/v1/jobs/${selectedJob.id}/`,
-          {
-            position,
-            company,
-            jobLocation,
-            status,
-            jobType,
-          },
+          { position, company, jobLocation, status, jobType },
           config
+        );
+
+        updatedJobs = jobs.map((job) =>
+          job.id === selectedJob.id ? data : job
         );
         setAlert({ type: "success", message: "Job updated successfully" });
       } else {
         // Create new job
-        await axios.post(
+        const { data } = await axios.post(
           "http://localhost:8000/api/v1/jobs/",
-          {
-            position,
-            company,
-            jobLocation,
-            status,
-            jobType,
-          },
+          { position, company, jobLocation, status, jobType },
           config
         );
+
+        updatedJobs = [data, ...jobs];
         setAlert({ type: "success", message: "Job added successfully" });
       }
 
+      setJobs(updatedJobs); // ✅ Update job list in context
       clearValues();
     } catch (error) {
       setAlert({ type: "error", message: "Something went wrong" });
@@ -104,6 +102,9 @@ const AddJob = ({ selectedJob, clearEdit }) => {
         `http://localhost:8000/api/v1/jobs/${selectedJob.id}/`,
         config
       );
+
+      const updatedJobs = jobs.filter((job) => job.id !== selectedJob.id);
+      setJobs(updatedJobs); // ✅ Remove job from list in context
       setAlert({ type: "success", message: "Job deleted successfully" });
       clearValues();
     } catch (error) {

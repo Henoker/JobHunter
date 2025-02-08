@@ -1,45 +1,24 @@
-import React, { useEffect, useState, useContext } from "react";
-import { useAuth } from "../context/AuthContext";
-import Loading from "./Loading";
+import React from "react";
+import { useAuth } from "../context/AuthContext"; // Ensure AuthContext provides setJobs
 import Job from "./Job";
 import Wrapper from "../assets/wrappers/JobsContainer";
-import axios from "axios";
 
 const JobsContainer = () => {
-  const { jobs } = useAuth();
-  console.log("All Jobs:", jobs);
+  const { jobs, setJobs } = useAuth(); // ✅ Include setJobs from context
+
+  const removeJobFromList = (id) => {
+    setJobs(jobs.filter((job) => job.id !== id)); // ✅ Remove deleted job
+  };
 
   return (
     <Wrapper>
-      {/* <h5>{totalJobs} job{jobs.length > 1 && 's'} found</h5>  */}
-      {/* <div className="jobs"> */}
-      {/* {jobs.map((job) => {
-          return <Job key={job._id} {...job} />
-        })} */}
-      {/* <Job /> */}
-      {/* </div> */}
-      {/* <div className="jobs">
-        {jobs && jobs.length > 0 ? (
-          jobs.map((job) => (
-            <div key={job.id}>
-              <h3>
-                {job.position} at {job.company}
-              </h3>
-              <p>{job.status}</p>
-              <p>{job.job_location}</p>
-            </div>
-          ))
-        ) : (
-          <p>No jobs available</p>
-        )}
-      </div> */}
       <h5>
         {jobs.length} job{jobs.length > 1 && "s"} found
       </h5>
       <div className="jobs">
-        {jobs.map((job) => {
-          return <Job key={job._id} {...job} />;
-        })}
+        {jobs.map((job) => (
+          <Job key={job.id} id={job.id} {...job} onDelete={removeJobFromList} />
+        ))}
       </div>
     </Wrapper>
   );
