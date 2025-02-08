@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
           );
           logout(); // Log out if token is invalid
         });
+
       axios
         .get("http://localhost:8000/api/v1/jobs/")
         .then((res) => {
@@ -38,6 +39,21 @@ export const AuthProvider = ({ children }) => {
         });
     }
   }, [token]);
+
+  const updateJobsList = (updatedJob) => {
+    setJobs((prevJobs) => {
+      const jobExists = prevJobs.find((job) => job.id === updatedJob.id);
+      if (jobExists) {
+        // Update existing job
+        return prevJobs.map((job) =>
+          job.id === updatedJob.id ? updatedJob : job
+        );
+      } else {
+        // Add new job
+        return [...prevJobs, updatedJob];
+      }
+    });
+  };
 
   const login = async (credentials) => {
     try {
@@ -86,7 +102,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Password Reset Request
   const passwordReset = async (email) => {
     try {
       const res = await axios.post(
@@ -99,12 +114,11 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // 🔹 Confirm Password Reset (using token)
   const passwordResetConfirm = async (token, password) => {
     try {
       const res = await axios.post(
         "http://localhost:8000/api/v1/password_reset/confirm/",
-        { token, password } // Send only one password field
+        { token, password }
       );
       return {
         success: true,
@@ -147,12 +161,12 @@ export const AuthProvider = ({ children }) => {
         }
       );
 
-      console.log("Updated user response:", response.data); // Debugging log
+      console.log("Updated user response:", response.data);
 
       if (response.status === 200) {
         setUser((prevUser) => ({
           ...prevUser,
-          ...response.data, // Merge updated user fields
+          ...response.data,
         }));
       } else {
         throw new Error("Failed to update profile.");
@@ -176,6 +190,7 @@ export const AuthProvider = ({ children }) => {
         passwordReset,
         passwordResetConfirm,
         updateUser,
+        updateJobsList,
       }}
     >
       {children}

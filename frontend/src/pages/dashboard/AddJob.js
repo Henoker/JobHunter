@@ -3,204 +3,145 @@ import { FormRow, FormRowSelect, Alert } from "../../components";
 import { useAuth } from "../../context/AuthContext";
 import Wrapper from "../../assets/wrappers/DashboardFormPage";
 import axios from "axios";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 
 const jobTypeOptions = ["full-time", "part-time", "remote", "internship"];
 const statusOptions = ["pending", "interview", "declined"];
 
-const AddJob = ({ selectedJob, clearEdit }) => {
-  const { user, token, jobs, setJobs } = useAuth(); // ✅ Get `setJobs` from context
-  const { id } = useParams();
-
-  // ✅ State for job fields
-  const [position, setPosition] = useState("");
-  const [company, setCompany] = useState("");
-  const [jobLocation, setJobLocation] = useState("");
-  const [status, setStatus] = useState("pending");
-  const [jobType, setJobType] = useState("full-time");
-  const [isEditing, setIsEditing] = useState(false);
+const AddJob = () => {
+  const { id } = useParams(); // Get job ID from URL
+  const navigate = useNavigate(); // Redirect after editing
+  const { updateJobsList } = useAuth();
+  const [job, setJob] = useState({
+    company: "",
+    position: "",
+    job_location: "",
+    job_type: "full-time",
+    status: "pending",
+  });
   const [loading, setLoading] = useState(false);
-  const [alert, setAlert] = useState({ type: "", message: "" });
+  const [alert, setAlert] = useState(null); // ✅ Use null for better re-rendering
 
-  // ✅ Load job data if editing
   useEffect(() => {
-    if (selectedJob) {
-      setPosition(selectedJob.position);
-      setCompany(selectedJob.company);
-      setJobLocation(selectedJob.jobLocation);
-      setStatus(selectedJob.status);
-      setJobType(selectedJob.jobType);
-      setIsEditing(true);
-    } else {
-      clearValues();
+    if (id) {
+      axios
+        .get(`http://localhost:8000/api/v1/jobs/${id}/`, {
+          headers: { Authorization: `Token ${localStorage.getItem("token")}` },
+        })
+        .then((response) => setJob(response.data))
+        .catch((error) => console.error("Error fetching job:", error));
     }
-  }, [selectedJob]);
+  }, [id]);
 
-  // ✅ Handle input change
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    if (name === "position") setPosition(value);
-    if (name === "company") setCompany(value);
-    if (name === "jobLocation") setJobLocation(value);
-    if (name === "status") setStatus(value);
-    if (name === "jobType") setJobType(value);
-  };
-
-  // ✅ Submit form (Create or Update Job)
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!position || !company || !jobLocation) {
-      setAlert({ type: "error", message: "Please fill all fields" });
-      return;
-    }
-
     setLoading(true);
+    setAlert(null);
+
     try {
-      const config = { headers: { Authorization: `Token ${token}` } };
-      let updatedJobs;
+      let response;
+      const jobData = {
+        company: job.company,
+        position: job.position,
+        job_location: job.job_location,
+        job_type: job.job_type,
+        status: job.status,
+      };
 
-      if (isEditing) {
-        // Update existing job
-        const { data } = await axios.put(
-          `http://localhost:8000/api/v1/jobs/${selectedJob.id}/`,
-          { position, company, jobLocation, status, jobType },
-          config
+      if (id) {
+        response = await axios.put(
+          `http://localhost:8000/api/v1/jobs/${id}/`,
+          jobData,
+          {
+            headers: {
+              Authorization: `Token ${localStorage.getItem("token")}`,
+            },
+          }
         );
-
-        updatedJobs = jobs.map((job) =>
-          job.id === selectedJob.id ? data : job
-        );
-        setAlert({ type: "success", message: "Job updated successfully" });
       } else {
-        // Create new job
-        const { data } = await axios.post(
-          "http://localhost:8000/api/v1/jobs/",
-          { position, company, jobLocation, status, jobType },
-          config
+        response = await axios.post(
+          `http://localhost:8000/api/v1/jobs/`,
+          jobData,
+          {
+            headers: {
+              Authorization: `Token ${localStorage.getItem("token")}`,
+            },
+          }
         );
-
-        updatedJobs = [data, ...jobs];
-        setAlert({ type: "success", message: "Job added successfully" });
       }
 
-      setJobs(updatedJobs); // ✅ Update job list in context
-      clearValues();
+      setAlert({
+        type: "success",
+        message: `Job ${id ? "updated" : "created"} successfully!`,
+      });
+
+      updateJobsList(response.data); // ✅ Call the function to update the job list
+
+      setTimeout(() => navigate("/"), 1500);
     } catch (error) {
-      setAlert({ type: "error", message: "Something went wrong" });
+      console.error("Error saving job:", error.response?.data || error.message);
+      setAlert({
+        type: "error",
+        message: error.response?.data?.detail || "Failed to save job.",
+      });
     } finally {
       setLoading(false);
     }
-  };
-
-  // ✅ Delete job
-  const handleDelete = async () => {
-    if (!isEditing) return;
-    setLoading(true);
-    try {
-      const config = { headers: { Authorization: `Token ${token}` } };
-      await axios.delete(
-        `http://localhost:8000/api/v1/jobs/${selectedJob.id}/`,
-        config
-      );
-
-      const updatedJobs = jobs.filter((job) => job.id !== selectedJob.id);
-      setJobs(updatedJobs); // ✅ Remove job from list in context
-      setAlert({ type: "success", message: "Job deleted successfully" });
-      clearValues();
-    } catch (error) {
-      setAlert({ type: "error", message: "Failed to delete job" });
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  // ✅ Clear form values
-  const clearValues = () => {
-    setPosition("");
-    setCompany("");
-    setJobLocation("");
-    setStatus("pending");
-    setJobType("full-time");
-    setIsEditing(false);
-    setAlert({ type: "", message: "" });
-    if (clearEdit) clearEdit(); // Call parent function to clear selectedJob
   };
 
   return (
     <Wrapper>
       <form className="form" onSubmit={handleSubmit}>
-        <h3>{isEditing ? "Edit Job" : "Add Job"}</h3>
-        {alert.message && <Alert type={alert.type} text={alert.message} />}
-
+        <h2>{id ? "Edit Job" : "Add Job"}</h2>
+        {alert && <Alert type={alert.type} text={alert.message} />}{" "}
+        {/* ✅ Fix alert rendering */}
         <div className="form-center">
-          {/* Position */}
-          <FormRow
-            type="text"
-            name="position"
-            value={position}
-            handleChange={handleChange}
-          />
-
-          {/* Company */}
           <FormRow
             type="text"
             name="company"
-            value={company}
-            handleChange={handleChange}
+            labelText="Company"
+            value={job.company}
+            handleChange={(e) => setJob({ ...job, company: e.target.value })}
           />
-
-          {/* Job Location */}
           <FormRow
             type="text"
-            name="jobLocation"
-            value={jobLocation}
-            handleChange={handleChange}
+            name="position"
+            labelText="Position"
+            value={job.position}
+            handleChange={(e) => setJob({ ...job, position: e.target.value })}
           />
-
-          {/* Job Status */}
+          <FormRow
+            type="text"
+            name="job_location"
+            labelText="Location"
+            value={job.job_location}
+            handleChange={(e) =>
+              setJob({ ...job, job_location: e.target.value })
+            }
+          />
+          <FormRowSelect
+            name="job_type"
+            labelText="Job Type"
+            value={job.job_type}
+            handleChange={(e) => setJob({ ...job, job_type: e.target.value })}
+            list={jobTypeOptions}
+          />
           <FormRowSelect
             name="status"
-            value={status}
-            handleChange={handleChange}
+            labelText="Status"
+            value={job.status}
+            handleChange={(e) => setJob({ ...job, status: e.target.value })}
             list={statusOptions}
           />
 
-          {/* Job Type */}
-          <FormRowSelect
-            name="jobType"
-            value={jobType}
-            handleChange={handleChange}
-            list={jobTypeOptions}
-          />
-
-          {/* Buttons */}
           <div className="btn-container">
             <button
               type="submit"
               className="btn btn-block submit-btn"
               disabled={loading}
             >
-              {loading ? "Processing..." : isEditing ? "Update Job" : "Submit"}
+              {loading ? "Saving..." : id ? "Update Job" : "Create Job"}
             </button>
-            <button
-              className="btn btn-block clear-btn"
-              onClick={(e) => {
-                e.preventDefault();
-                clearValues();
-              }}
-            >
-              Clear
-            </button>
-            {isEditing && (
-              <button
-                type="button"
-                className="btn btn-block delete-btn"
-                onClick={handleDelete}
-                disabled={loading}
-              >
-                {loading ? "Processing..." : "Delete"}
-              </button>
-            )}
           </div>
         </div>
       </form>

@@ -7,3 +7,6 @@ class JobSerializer(serializers.ModelSerializer):
     class Meta:
         model = Job
         fields = ['id', 'company', 'position', 'status', 'job_location', 'job_type', 'created_at', 'created_by']
+        extra_kwargs = {
+            'created_by': {'required': False}
+        }
