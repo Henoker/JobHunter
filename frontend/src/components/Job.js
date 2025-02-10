@@ -6,6 +6,7 @@ import Wrapper from "../assets/wrappers/Job";
 import JobInfo from "./JobInfo";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const Job = ({
   id,
@@ -19,17 +20,34 @@ const Job = ({
 }) => {
   const date = moment(created_at).format("MMM Do, YYYY");
   const { token } = useAuth(); // Get token from context
+  const navigate = useNavigate();
 
   // ✅ Handle Job Deletion
+  // const handleDelete = async () => {
+  //   console.log("Token before delete request:", token); // Debugging
+  //   try {
+  //     await axios.delete(`http://localhost:8000/api/v1/jobs/${id}/`, {
+  //       headers: { Authorization: `Token ${token}` },
+  //     });
+  //     onDelete(id);
+  //   } catch (error) {
+  //     console.error("Error deleting job:", error.response || error);
+  //   }
+  // };
   const handleDelete = async () => {
-    console.log("Token before delete request:", token); // Debugging
-    try {
-      await axios.delete(`http://localhost:8000/api/v1/jobs/${id}/`, {
-        headers: { Authorization: `Token ${token}` },
-      });
-      onDelete(id);
-    } catch (error) {
-      console.error("Error deleting job:", error.response || error);
+    const confirmDelete = window.confirm(
+      "Are you sure you want to delete this job?"
+    );
+    if (confirmDelete) {
+      try {
+        await axios.delete(`http://localhost:8000/api/v1/jobs/${id}/`, {
+          headers: { Authorization: `Token ${token}` },
+        });
+        onDelete(id); // Call the onDelete function to update the job list
+        setTimeout(() => navigate("/"), 1500);
+      } catch (error) {
+        console.error("Error deleting job:", error);
+      }
     }
   };
 
