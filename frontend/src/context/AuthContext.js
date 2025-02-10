@@ -151,7 +151,7 @@ export const AuthProvider = ({ children }) => {
   const updateUser = async (updatedData) => {
     try {
       const response = await axios.patch(
-        "http://localhost:8000/api/v1/accounts/users/update_profile/",
+        "http://127.0.0.1:8000/api/v1/accountsusers/update_profile/",
         updatedData,
         {
           headers: {
