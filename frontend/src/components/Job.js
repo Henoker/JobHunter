@@ -19,17 +19,17 @@ const Job = ({
 }) => {
   const date = moment(created_at).format("MMM Do, YYYY");
   const { token } = useAuth(); // Get token from context
-  console.log("Job ID:", id);
 
   // ✅ Handle Job Deletion
   const handleDelete = async () => {
+    console.log("Token before delete request:", token); // Debugging
     try {
       await axios.delete(`http://localhost:8000/api/v1/jobs/${id}/`, {
         headers: { Authorization: `Token ${token}` },
       });
-      onDelete(id); // Remove job from list after deletion
+      onDelete(id);
     } catch (error) {
-      console.error("Error deleting job:", error);
+      console.error("Error deleting job:", error.response || error);
     }
   };
 
