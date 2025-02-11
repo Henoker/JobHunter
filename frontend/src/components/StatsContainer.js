@@ -1,10 +1,11 @@
-import { useAppContext } from "../context/appContext";
-import StatItem from "./StatItem";
+// import { useAppContext } from "../context/appContext";
+import StatsItem from "./StatsItem";
 import { FaSuitcaseRolling, FaCalendarCheck, FaBug } from "react-icons/fa";
 import Wrapper from "../assets/wrappers/JobsContainer";
 
 const StatsContainer = () => {
-  const { stats } = useAppContext();
+  //   const { stats } = useAppContext();
+  const stats = 0;
 
   const defaultStats = [
     {
@@ -33,7 +34,7 @@ const StatsContainer = () => {
   return (
     <Wrapper>
       {defaultStats.map((item, index) => {
-        return <StatItem key={index} {...item} />;
+        return <StatsItem key={index} {...item} />;
       })}
     </Wrapper>
   );
