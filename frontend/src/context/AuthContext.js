@@ -148,6 +148,36 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
+  // const updateUser = async (updatedData) => {
+  //   try {
+  //     const response = await axios.patch(
+  //       "http://127.0.0.1:8000/api/v1/accountsusers/update_profile/",
+  //       updatedData,
+  //       {
+  //         headers: {
+  //           Authorization: `Token ${token}`,
+  //           "Content-Type": "application/json",
+  //         },
+  //       }
+  //     );
+
+  //     console.log("Updated user response:", response.data);
+
+  //     if (response.status === 200) {
+  //       setUser((prevUser) => ({
+  //         ...prevUser,
+  //         ...response.data,
+  //       }));
+  //     } else {
+  //       throw new Error("Failed to update profile.");
+  //     }
+  //   } catch (error) {
+  //     console.error(
+  //       "Error updating profile:",
+  //       error.response?.data || error.message
+  //     );
+  //   }
+  // };
   const updateUser = async (updatedData) => {
     try {
       const response = await axios.patch(
@@ -164,18 +194,38 @@ export const AuthProvider = ({ children }) => {
       console.log("Updated user response:", response.data);
 
       if (response.status === 200) {
+        // Update the user state with the new data
         setUser((prevUser) => ({
           ...prevUser,
           ...response.data,
         }));
+
+        // Return success status and message
+        return {
+          success: true,
+          message: "Profile updated successfully!",
+          data: response.data, // Optional: Include the updated data if needed
+        };
       } else {
-        throw new Error("Failed to update profile.");
+        // Return failure status and message
+        return {
+          success: false,
+          message: "Failed to update profile. Please try again.",
+        };
       }
     } catch (error) {
       console.error(
         "Error updating profile:",
         error.response?.data || error.message
       );
+
+      // Return failure status and error message
+      return {
+        success: false,
+        message:
+          error.response?.data?.message ||
+          "An error occurred while updating the profile.",
+      };
     }
   };
 
