@@ -8,7 +8,7 @@ const ChartsContainer = () => {
   const [barChart, setBarChart] = useState(true);
   const { jobStats } = useAuth(); // Get stats from AuthContext
 
-  const data = jobStats?.monthlyApplications || []; // Handle missing data safely
+  const data = jobStats?.monthly_job_applications || []; // Now correctly an array
 
   return (
     <Wrapper>
