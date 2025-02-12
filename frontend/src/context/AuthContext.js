@@ -7,10 +7,17 @@ export const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [token, setToken] = useState(localStorage.getItem("token") || "");
   const [jobs, setJobs] = useState([]);
+  const [jobStats, setJobStats] = useState({
+    total_jobs: 0,
+    pending_jobs: 0,
+    interview_jobs: 0,
+    declined_jobs: 0,
+  });
 
   useEffect(() => {
     if (token) {
       axios.defaults.headers.common["Authorization"] = `Token ${token}`;
+
       axios
         .get("http://localhost:8000/api/v1/accountsusers/")
         .then((res) => {
@@ -22,36 +29,51 @@ export const AuthProvider = ({ children }) => {
             "Error fetching user:",
             err.response?.data || err.message
           );
-          logout(); // Log out if token is invalid
-        });
-
-      axios
-        .get("http://localhost:8000/api/v1/jobs/")
-        .then((res) => {
-          setJobs(res.data); // Store the jobs for the user
-          console.log("All Jobs:", res.data);
-        })
-        .catch((err) => {
-          console.error(
-            "Failed to fetch jobs:",
-            err.response?.data || err.message
-          );
+          logout();
         });
     }
   }, [token]);
 
+  useEffect(() => {
+    if (token) {
+      axios
+        .get("http://localhost:8000/api/v1/jobs/")
+        .then((res) => {
+          console.log("All Jobs:", res.data);
+          setJobs(res.data);
+        })
+        .catch((err) =>
+          console.error(
+            "Failed to fetch jobs:",
+            err.response?.data || err.message
+          )
+        );
+    }
+  }, [token]);
+
+  useEffect(() => {
+    if (token) {
+      axios
+        .get("http://localhost:8000/api/v1/jobs/stats/")
+        .then((res) => {
+          console.log("Job Stats Response:", res.data);
+          setJobStats(res.data);
+        })
+        .catch((err) =>
+          console.error(
+            "Failed to fetch job statistics:",
+            err.response?.data || err.message
+          )
+        );
+    }
+  }, [token, jobStats]);
+
   const updateJobsList = (updatedJob) => {
     setJobs((prevJobs) => {
       const jobExists = prevJobs.find((job) => job.id === updatedJob.id);
-      if (jobExists) {
-        // Update existing job
-        return prevJobs.map((job) =>
-          job.id === updatedJob.id ? updatedJob : job
-        );
-      } else {
-        // Add new job
-        return [...prevJobs, updatedJob];
-      }
+      return jobExists
+        ? prevJobs.map((job) => (job.id === updatedJob.id ? updatedJob : job))
+        : [...prevJobs, updatedJob];
     });
   };
 
@@ -61,20 +83,12 @@ export const AuthProvider = ({ children }) => {
         "http://localhost:8000/api/v1/accountslogin/",
         credentials
       );
-
       localStorage.setItem("token", res.data.token);
       setToken(res.data.token);
       setUser(res.data.user);
-
       axios.defaults.headers.common[
         "Authorization"
       ] = `Token ${res.data.token}`;
-
-      axios
-        .get("http://localhost:8000/api/v1/jobs/")
-        .then((res) => setJobs(res.data))
-
-        .catch((err) => console.error("Error fetching jobs:", err));
     } catch (err) {
       console.error("Login failed", err.response?.data || err.message);
       throw new Error(err.response?.data?.detail || "Login failed.");
@@ -83,12 +97,10 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (formData) => {
     try {
-      const res = await axios.post(
+      await axios.post(
         "http://localhost:8000/api/v1/accountsregister/",
         formData
       );
-
-      console.log("Registration successful:", res.data);
       return {
         success: true,
         message: "Registration successful! Check your email for activation.",
@@ -104,27 +116,26 @@ export const AuthProvider = ({ children }) => {
 
   const passwordReset = async (email) => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/password_reset/",
-        { email }
-      );
+      await axios.post("http://localhost:8000/api/v1/password_reset/", {
+        email,
+      });
       return { success: true, message: "Check your email for reset link." };
-    } catch (error) {
+    } catch {
       return { success: false, message: "Password reset request failed." };
     }
   };
 
   const passwordResetConfirm = async (token, password) => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/password_reset/confirm/",
-        { token, password }
-      );
+      await axios.post("http://localhost:8000/api/v1/password_reset/confirm/", {
+        token,
+        password,
+      });
       return {
         success: true,
         message: "Password reset successful. You can now log in.",
       };
-    } catch (error) {
+    } catch {
       return { success: false, message: "Password reset confirmation failed." };
     }
   };
@@ -134,9 +145,7 @@ export const AuthProvider = ({ children }) => {
       await axios.post(
         "http://localhost:8000/api/v1/logout/",
         {},
-        {
-          headers: { Authorization: `Token ${token}` },
-        }
+        { headers: { Authorization: `Token ${token}` } }
       );
     } catch (err) {
       console.error("Logout failed", err.response?.data || err.message);
@@ -148,36 +157,6 @@ export const AuthProvider = ({ children }) => {
     }
   };
 
-  // const updateUser = async (updatedData) => {
-  //   try {
-  //     const response = await axios.patch(
-  //       "http://127.0.0.1:8000/api/v1/accountsusers/update_profile/",
-  //       updatedData,
-  //       {
-  //         headers: {
-  //           Authorization: `Token ${token}`,
-  //           "Content-Type": "application/json",
-  //         },
-  //       }
-  //     );
-
-  //     console.log("Updated user response:", response.data);
-
-  //     if (response.status === 200) {
-  //       setUser((prevUser) => ({
-  //         ...prevUser,
-  //         ...response.data,
-  //       }));
-  //     } else {
-  //       throw new Error("Failed to update profile.");
-  //     }
-  //   } catch (error) {
-  //     console.error(
-  //       "Error updating profile:",
-  //       error.response?.data || error.message
-  //     );
-  //   }
-  // };
   const updateUser = async (updatedData) => {
     try {
       const response = await axios.patch(
@@ -190,24 +169,15 @@ export const AuthProvider = ({ children }) => {
           },
         }
       );
-
       console.log("Updated user response:", response.data);
-
       if (response.status === 200) {
-        // Update the user state with the new data
-        setUser((prevUser) => ({
-          ...prevUser,
-          ...response.data,
-        }));
-
-        // Return success status and message
+        setUser((prevUser) => ({ ...prevUser, ...response.data }));
         return {
           success: true,
           message: "Profile updated successfully!",
-          data: response.data, // Optional: Include the updated data if needed
+          data: response.data,
         };
       } else {
-        // Return failure status and message
         return {
           success: false,
           message: "Failed to update profile. Please try again.",
@@ -218,8 +188,6 @@ export const AuthProvider = ({ children }) => {
         "Error updating profile:",
         error.response?.data || error.message
       );
-
-      // Return failure status and error message
       return {
         success: false,
         message:
@@ -235,6 +203,7 @@ export const AuthProvider = ({ children }) => {
         user,
         login,
         jobs,
+        jobStats,
         token,
         logout,
         register,

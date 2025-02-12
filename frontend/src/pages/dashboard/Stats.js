@@ -2,24 +2,24 @@ import { useEffect, useState } from "react";
 import ChartsContainer from "../../components/ChartsContainer";
 import Loading from "../../components/Loading";
 import StatsContainer from "../../components/StatsContainer";
-// import { useAppContext } from "../../context/appContext";
+import { useAuth } from "../../context/AuthContext";
 
 const Stats = () => {
-  // const { showStats, isLoading, monthlyApplications } = useAppContext();
-  const [loading, setLoading] = useState(false);
-  const monthlyApplications = 0;
+  const [loading, setLoading] = useState(true);
+  const { jobStats } = useAuth();
 
   useEffect(() => {
-    // showStats();
-    // eslint-disable-next-line
+    setLoading(false);
   }, []);
-  if (setLoading) {
+
+  if (loading) {
     return <Loading center />;
   }
+
   return (
     <>
       <StatsContainer />
-      {monthlyApplications.length > 0 && <ChartsContainer />}
+      {jobStats?.total_jobs > 0 && <ChartsContainer />}
     </>
   );
 };

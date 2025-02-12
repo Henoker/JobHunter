@@ -1,30 +1,33 @@
-// import { useAppContext } from "../context/appContext";
+import { useEffect } from "react";
+import { useAuth } from "../context/AuthContext";
 import StatsItem from "./StatsItem";
 import { FaSuitcaseRolling, FaCalendarCheck, FaBug } from "react-icons/fa";
 import Wrapper from "../assets/wrappers/JobsContainer";
 
 const StatsContainer = () => {
-  //   const { stats } = useAppContext();
-  const stats = 0;
-
+  const { jobStats } = useAuth(); // Get stats from context
+  console.log(jobStats);
+  useEffect(() => {
+    console.log("Updated jobStats in StatsContainer:", jobStats);
+  }, [jobStats]);
   const defaultStats = [
     {
-      title: "pending applications",
-      count: stats.pending || 0,
+      title: "Pending Applications",
+      count: jobStats.pending_jobs || 0, // Use correct key
       icon: <FaSuitcaseRolling />,
       color: "#e9b949",
       bcg: "#fcefc7",
     },
     {
-      title: "interviews scheduled",
-      count: stats.interview || 0,
+      title: "Interviews Scheduled",
+      count: jobStats.interview_jobs || 0, // Use correct key
       icon: <FaCalendarCheck />,
       color: "#647acb",
       bcg: "#e0e8f9",
     },
     {
-      title: "jobs declined",
-      count: stats.declined || 0,
+      title: "Jobs Declined",
+      count: jobStats.declined_jobs || 0, // Use correct key
       icon: <FaBug />,
       color: "#d66a6a",
       bcg: "#ffeeee",
@@ -33,9 +36,9 @@ const StatsContainer = () => {
 
   return (
     <Wrapper>
-      {defaultStats.map((item, index) => {
-        return <StatsItem key={index} {...item} />;
-      })}
+      {defaultStats.map((item, index) => (
+        <StatsItem key={index} {...item} />
+      ))}
     </Wrapper>
   );
 };
