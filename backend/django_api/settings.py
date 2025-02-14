@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'knox', 
     'django_rest_passwordreset',
+    'drf_spectacular',
 ]
 
 MIDDLEWARE = [
@@ -57,6 +58,14 @@ REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',  # Require authentication for all endpoints
     ],
+    'DEFAULT_SCHEMA_CLASS': 'drf_spectacular.openapi.AutoSchema',
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Job Hunter API Project",
+    "DESCRIPTION": "A sample Job follow up app for users",
+    "VERSION": "1.0.0",
+# OTHER SETTINGS
 }
 
 
