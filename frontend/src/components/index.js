@@ -8,6 +8,7 @@ import NavLinks from "./NavLinks";
 import Loading from "./Loading";
 import JobsContainer from "./JobsContainer";
 import FormRowSelect from "./FormRowSelect";
+import SearchContainer from "./SearchContainer";
 export {
   Logo,
   FormRow,
@@ -19,4 +20,5 @@ export {
   Loading,
   JobsContainer,
   FormRowSelect,
+  SearchContainer,
 };
