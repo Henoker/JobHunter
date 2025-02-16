@@ -5,7 +5,7 @@
 }
 
 /* fonts */
-@import url('https://fonts.googleapis.com/css2?family=Cabin&family=Roboto+Condensed:wght@400;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Cabin&family=Roboto+Condensed:wght@400;700&display=swap");
 
 html {
   font-size: 100%;
@@ -13,7 +13,7 @@ html {
 
 :root {
   /* colors */
-  --primary-50: #e0fcff;
+  /* --primary-50: #e0fcff;
   --primary-100: #bef8fd;
   --primary-200: #87eaf2;
   --primary-300: #54d1db;
@@ -22,10 +22,20 @@ html {
   --primary-600: #14919b;
   --primary-700: #0e7c86;
   --primary-800: #0a6c74;
-  --primary-900: #044e54;
+  --primary-900: #044e54; */
+  --primary-50: #e3f2fd;
+  --primary-100: #bbdefb;
+  --primary-200: #90caf9;
+  --primary-300: #64b5f6;
+  --primary-400: #42a5f5;
+  --primary-500: #2196f3;
+  --primary-600: #1e88e5;
+  --primary-700: #1976d2;
+  --primary-800: #1565c0;
+  --primary-900: #0d47a1;
 
   /* grey */
-  --grey-50: #f0f4f8;
+  /* --grey-50: #f0f4f8;
   --grey-100: #d9e2ec;
   --grey-200: #bcccdc;
   --grey-300: #9fb3c8;
@@ -34,7 +44,28 @@ html {
   --grey-600: #486581;
   --grey-700: #334e68;
   --grey-800: #243b53;
-  --grey-900: #102a43;
+  --grey-900: #102a43; */
+  /* --grey-50: #f0fcf9;
+  --grey-100: #ccf2eb;
+  --grey-200: #99e0d5;
+  --grey-300: #66cdbc;
+  --grey-400: #33b9a3;
+  --grey-500: #009688;
+  --grey-600: #007a6e;
+  --grey-700: #005f54;
+  --grey-800: #00463f;
+  --grey-900: #002f2a; */
+  --grey-50: #fdf7f2;
+  --grey-100: #f6ebdc;
+  --grey-200: #e9d7c3;
+  --grey-300: #d6bea7;
+  --grey-400: #bfa28b;
+  --grey-500: #a3866f;
+  --grey-600: #876b55;
+  --grey-700: #6a5240;
+  --grey-800: #533e30;
+  --grey-900: #3e2d22;
+
   /* rest of the colors */
   --black: #222;
   --white: #fff;
@@ -44,8 +75,8 @@ html {
   --green-dark: #0f5132;
 
   /* fonts  */
-  --headingFont: 'Roboto Condensed', Sans-Serif;
-  --bodyFont: 'Cabin', Sans-Serif;
+  --headingFont: "Roboto Condensed", Sans-Serif;
+  --bodyFont: "Cabin", Sans-Serif;
   --small-text: 0.875rem;
   --extra-small-text: 0.7em;
   /* rest of the vars */
