@@ -87,33 +87,40 @@ class ListCreateJobView(generics.ListCreateAPIView):
         user = self.request.user
         queryset = Job.objects.filter(created_by=user)
 
+        # Get query parameters safely
+        search_query = self.request.query_params.get("search", "").strip()
+        status_filter = self.request.query_params.get("status", "").strip()
+        job_type_filter = self.request.query_params.get("job_type", "").strip()
+        sort_option = self.request.query_params.get("sort", "latest").strip()
+
         # Apply search filter (if provided)
-        search_query = self.request.query_params.get("search", None)
         if search_query:
             queryset = queryset.filter(
                 Q(title__icontains=search_query) | Q(company__icontains=search_query)
             )
 
         # Filter by job status
-        status_filter = self.request.query_params.get("status", None)
         if status_filter:
             queryset = queryset.filter(status=status_filter)
 
         # Filter by job type
-        job_type_filter = self.request.query_params.get("job_type", None)
         if job_type_filter:
             queryset = queryset.filter(job_type=job_type_filter)
 
-        # Apply sorting
-        sort_option = self.request.query_params.get("sort", "latest")
-        if sort_option == "latest":
-            queryset = queryset.order_by("-created_at")
-        elif sort_option == "oldest":
-            queryset = queryset.order_by("created_at")
-        elif sort_option == "a-z":
-            queryset = queryset.order_by("title")
-        elif sort_option == "z-a":
-            queryset = queryset.order_by("-title")
+        # Apply sorting safely
+        valid_sort_options = {
+            "latest": "-created_at",
+            "oldest": "created_at",
+            "a-z": "position",
+            "z-a": "-position",
+        }
+
+        if sort_option in valid_sort_options:
+            queryset = queryset.order_by(valid_sort_options[sort_option])
+        else:
+            return Response(
+                {"error": "Invalid sorting option"}, status=status.HTTP_400_BAD_REQUEST
+            )
 
         return queryset
 
