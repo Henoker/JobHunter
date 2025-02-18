@@ -1,12 +1,5 @@
-// import logo from "../assets/images/logo.svg";
-// import React from "react";
-
-// const Logo = () => {
-//   return <img src={logo} alt="Jobify" className="logo" />;
-// };
-
-// export default Logo;
 import * as React from "react";
+
 const Logo = (props) => (
   <svg
     width={164}
@@ -25,16 +18,17 @@ const Logo = (props) => (
       fill="white"
       fontWeight="bold"
     >
-      {"\n    J\n  "}
+      {"J"}
     </text>
     <text
       x={50}
       y={35}
       fontFamily="Arial, sans-serif"
       fontSize={30}
-      fill="#2CB1BC"
+      fill="#ff6347"
+      fontWeight="bold"
     >
-      {"\n    JobHunter\n  "}
+      {"JobHunter"}
     </text>
     <defs>
       <linearGradient
@@ -45,10 +39,11 @@ const Logo = (props) => (
         y2={50}
         gradientUnits="userSpaceOnUse"
       >
-        <stop offset="0%" stopColor="#2CB1BC" stopOpacity={0.8} />
-        <stop offset="100%" stopColor="#2CB1BC" stopOpacity={0.5} />
+        <stop offset="0%" stopColor="#ff6347" stopOpacity={0.8} />
+        <stop offset="100%" stopColor="#ff6347" stopOpacity={0.5} />
       </linearGradient>
     </defs>
   </svg>
 );
+
 export default Logo;
