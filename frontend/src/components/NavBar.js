@@ -19,26 +19,11 @@ const NavBar = ({ toggleSidebar }) => {
         <button type="button" className="toggle-btn" onClick={toggleSidebar}>
           <FaAlignLeft />
         </button>
-        {/* <button 
-            type='button'
-            className='toggle-btn' 
-            onClick={toggleSidebar}><FaAlignLeft/></button> */}
         <div>
           <Logo />
           <h3 className="logo-text">Dashboard</h3>
         </div>
-        {/* <div className="btn-container">
-          <button type="button" className="btn" onClick={logout}>
-            <FaUserCircle />
-            name
-            <FaCaretDown />
-          </button>
-          <div className={logout ? "dropdown show-dropdown" : "dropdown"}>
-            <button type="button" className="dropdown-btn">
-              Logout
-            </button>
-          </div>
-        </div> */}
+
         <div className="btn-container">
           <button
             type="button"
