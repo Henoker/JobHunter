@@ -11,7 +11,7 @@ import { useState } from "react";
 const NavBar = ({ toggleSidebar }) => {
   const { user, logout } = useAuth();
   const [showLogout, setShowLogout] = useState(false);
-  console.log(user);
+  // console.log(user);
   return (
     <Wrapper>
       <div className="nav-center">

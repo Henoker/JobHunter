@@ -22,18 +22,6 @@ const Job = ({
   const { token } = useAuth(); // Get token from context
   const navigate = useNavigate();
 
-  // ✅ Handle Job Deletion
-  // const handleDelete = async () => {
-  //   console.log("Token before delete request:", token); // Debugging
-  //   try {
-  //     await axios.delete(`http://localhost:8000/api/v1/jobs/${id}/`, {
-  //       headers: { Authorization: `Token ${token}` },
-  //     });
-  //     onDelete(id);
-  //   } catch (error) {
-  //     console.error("Error deleting job:", error.response || error);
-  //   }
-  // };
   const handleDelete = async () => {
     const confirmDelete = window.confirm(
       "Are you sure you want to delete this job?"

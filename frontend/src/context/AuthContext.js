@@ -21,7 +21,7 @@ export const AuthProvider = ({ children }) => {
       axios
         .get("http://localhost:8000/api/v1/accountsusers/")
         .then((res) => {
-          console.log("User Data:", res.data);
+          // console.log("User Data:", res.data);
           setUser(res.data);
         })
         .catch((err) => {
@@ -39,7 +39,7 @@ export const AuthProvider = ({ children }) => {
       axios
         .get("http://localhost:8000/api/v1/jobs/")
         .then((res) => {
-          console.log("All Jobs:", res.data);
+          // console.log("All Jobs:", res.data);
           setJobs(res.data);
         })
         .catch((err) =>
@@ -56,7 +56,7 @@ export const AuthProvider = ({ children }) => {
       axios
         .get("http://localhost:8000/api/v1/jobs/stats/")
         .then((res) => {
-          console.log("Job Stats Response:", res.data);
+          // console.log("Job Stats Response:", res.data);
           setJobStats(res.data);
         })
         .catch((err) =>
@@ -71,9 +71,15 @@ export const AuthProvider = ({ children }) => {
   const updateJobsList = (updatedJob) => {
     setJobs((prevJobs) => {
       const jobExists = prevJobs.find((job) => job.id === updatedJob.id);
-      return jobExists
-        ? prevJobs.map((job) => (job.id === updatedJob.id ? updatedJob : job))
-        : [...prevJobs, updatedJob];
+      if (jobExists) {
+        // Update existing job
+        return prevJobs.map((job) =>
+          job.id === updatedJob.id ? updatedJob : job
+        );
+      } else {
+        // Add new job
+        return [...prevJobs, updatedJob];
+      }
     });
   };
 

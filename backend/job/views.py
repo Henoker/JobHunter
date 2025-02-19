@@ -50,12 +50,13 @@ class ListCreateJobView(generics.ListCreateAPIView):
 
         if sort_option in valid_sort_options:
             queryset = queryset.order_by(valid_sort_options[sort_option])
-        else:
-            return Response(
-                {"error": "Invalid sorting option"}, status=status.HTTP_400_BAD_REQUEST
-            )
 
         return queryset
+
+    def perform_create(self, serializer):
+        """Automatically assign the logged-in user as the job creator"""
+        serializer.save(created_by=self.request.user)
+
 
 
 class RetrieveUpdateDeleteJobView(generics.RetrieveUpdateDestroyAPIView):
