@@ -122,7 +122,7 @@ export const AuthProvider = ({ children }) => {
       );
       return {
         success: true,
-        message: "Registration successful! Check your email for activation.",
+        message: "Registration successful! Redirecting to login page...",
       };
     } catch (err) {
       console.error("Registration failed", err.response?.data || err.message);
