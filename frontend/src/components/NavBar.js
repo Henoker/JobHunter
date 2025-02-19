@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import Wrapper from "../assets/wrappers/Navbar";
 import { useAuth } from "../context/AuthContext";
 import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
@@ -7,7 +7,6 @@ import { FaAlignLeft, FaUserCircle, FaCaretDown } from "react-icons/fa";
 
 import Logo from "./Logo";
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
 
 const NavBar = ({ toggleSidebar }) => {
   const { user, logout } = useAuth();
