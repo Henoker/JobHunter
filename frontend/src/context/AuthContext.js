@@ -68,7 +68,7 @@ export const AuthProvider = ({ children }) => {
     }
   }, [token, jobStats]);
 
-  const updateJobsList = (updatedJob) => {
+  const updateJobsList = async (updatedJob) => {
     setJobs((prevJobs) => {
       const jobExists = prevJobs.find((job) => job.id === updatedJob.id);
       if (jobExists) {
@@ -81,6 +81,19 @@ export const AuthProvider = ({ children }) => {
         return [...prevJobs, updatedJob];
       }
     });
+
+    // Fetch updated job stats
+    try {
+      const statsResponse = await axios.get(
+        "http://localhost:8000/api/v1/jobs/stats/"
+      );
+      setJobStats(statsResponse.data);
+    } catch (err) {
+      console.error(
+        "Failed to fetch updated job stats:",
+        err.response?.data || err.message
+      );
+    }
   };
 
   const login = async (credentials) => {
