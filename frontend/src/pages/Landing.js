@@ -1,5 +1,5 @@
 import Logo from "../components/Logo";
-import main from "../assets/images/main.svg";
+import main from "../assets/images/tree-swing.svg";
 import Wrapper from "../assets/wrappers/LandingPage";
 import { useNavigate } from "react-router-dom";
 
