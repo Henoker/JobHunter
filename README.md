@@ -18,6 +18,7 @@ A job tracking site built with Django/PostgreSQL backend and React Js frontend. 
 ## Screenshots
 
 ![Screenshot](frontend/public/Dashboard.png)
+![Screenshot](frontend/src/assets/Alljobs.png)
 
 ## About the Project
 
