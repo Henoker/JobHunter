@@ -107,9 +107,6 @@ python manage.py runserver
    npm run start
    ```
 
-```
-
-
 4. **Environment Variables**
 
 - Create .env files for both backend and frontend with appropriate configuration (database URL, API endpoints, etc.)
@@ -119,6 +116,7 @@ python manage.py runserver
 - MIT License
 
 ## Images
+
 ![Screenshot](frontend/src/assets/images/Alljobs.png)
 
 ## Contact
@@ -133,4 +131,3 @@ python manage.py runserver
 ## Love my effort?
 
 <a href='https://www.linkedin.com/in/henock-beyene-tesfatsion-921ba54b/' target='_blank'><img height='35' style='border:0px;height:34px;' src='frontend/client/public/download.jpg' border='0' alt='Hire me at LinkediN' />
-```
