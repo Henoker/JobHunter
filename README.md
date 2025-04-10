@@ -18,7 +18,6 @@ A job tracking site built with Django/PostgreSQL backend and React Js frontend. 
 ## Screenshots
 
 ![Screenshot](frontend/public/Dashboard.png)
-![Screenshot](frontend/src/assets/images/Alljobs.png)
 
 ## About the Project
 
@@ -64,7 +63,6 @@ This is a full stack react js frontend and Django js and PostgreSQL Backend app 
 - Axios for API calls
 - React useContext (state management)
 - Styled Components for CSS
--
 
 ## Getting Started
 
@@ -86,22 +84,31 @@ This is a full stack react js frontend and Django js and PostgreSQL Backend app 
 
 2. **Backend Setup**
 
-- cd backend
-- python -m venv venv
-- venv\Scripts\activate
-- pip install -r requirements.txt
+   ```bash
+   cd backend
+   python -m venv venv
+   venv\Scripts\activate
+   pip install -r requirements.txt
+   ```
 
 # Set up PostgreSQL database and update settings.py
 
-- python manage.py migrate
-- python manage.py createsuperuser
-- python manage.py runserver
+```bash
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver
+```
 
 3. **Frontend Setup**
 
-- cd frontend
-- npm install
-- npm run start
+   ```bash
+   cd frontend
+   npm install
+   npm run start
+   ```
+
+```
+
 
 4. **Environment Variables**
 
@@ -110,6 +117,9 @@ This is a full stack react js frontend and Django js and PostgreSQL Backend app 
 ## LICENSE
 
 - MIT License
+
+## Images
+![Screenshot](frontend/src/assets/images/Alljobs.png)
 
 ## Contact
 
@@ -123,3 +133,4 @@ This is a full stack react js frontend and Django js and PostgreSQL Backend app 
 ## Love my effort?
 
 <a href='https://www.linkedin.com/in/henock-beyene-tesfatsion-921ba54b/' target='_blank'><img height='35' style='border:0px;height:34px;' src='frontend/client/public/download.jpg' border='0' alt='Hire me at LinkediN' />
+```
