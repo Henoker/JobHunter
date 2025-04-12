@@ -130,4 +130,4 @@ python manage.py runserver
 
 ## Love my effort?
 
-<a href='https://www.linkedin.com/in/henock-beyene-tesfatsion-921ba54b/' target='_blank'><img height='35' style='border:0px;height:34px;' src='frontend/client/public/download.jpg' border='0' alt='Hire me at LinkediN' />
+<a href='https://www.linkedin.com/in/henock-beyene-tesfatsion-921ba54b/' target='_blank'><img height='35' style='border:0px;height:34px;' src='frontend/assets/images/download.jpg' border='0' alt='Hire me at LinkediN' />
